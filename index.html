@@ -1,524 +1,559 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Phonics Reading Assessment</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: #f4f7fb;
-      color: #263238;
-    }
-
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 25px;
-    }
-
-    h1 {
-      text-align: center;
-      margin: 5px 0 8px;
-      color: #263238;
-      font-size: 34px;
-    }
-
-    .subtitle {
-      text-align: center;
-      color: #607d8b;
-      margin-bottom: 25px;
-    }
-
-    .card {
-      background: white;
-      border-radius: 18px;
-      padding: 25px;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.08);
-      margin-bottom: 20px;
-    }
-
-    .section-title {
-      font-size: 22px;
-      font-weight: bold;
-      margin-bottom: 15px;
-    }
-
-    /* =========================
-       SETUP
-    ========================= */
-
-    .category-section {
-      margin-bottom: 25px;
-    }
-
-    .category-group {
-      border: 1px solid #dce3e8;
-      border-radius: 14px;
-      padding: 16px;
-      margin-bottom: 15px;
-      background: #fafcfe;
-    }
-
-    .category-group h3 {
-      margin: 0 0 12px;
-      font-size: 18px;
-    }
-
-    .category-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 10px;
-    }
-
-    .category-button {
-      border: 2px solid #d8e0e5;
-      background: white;
-      border-radius: 10px;
-      padding: 11px 8px;
-      cursor: pointer;
-      font-size: 15px;
-      transition: 0.15s;
-    }
-
-    .category-button:hover {
-      background: #f0f7ff;
-    }
-
-    .category-button.selected {
-      background: #e3f2fd;
-      border-color: #2196f3;
-      color: #1565c0;
-      font-weight: bold;
-    }
-
-    .selection-controls {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 15px;
-      flex-wrap: wrap;
-    }
-
-    .small-button {
-      border: none;
-      border-radius: 8px;
-      padding: 9px 15px;
-      cursor: pointer;
-      background: #eceff1;
-      color: #37474f;
-      font-size: 14px;
-    }
-
-    .small-button:hover {
-      background: #cfd8dc;
-    }
-
-    .timer-options {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .timer-option {
-      flex: 1;
-      min-width: 90px;
-      border: 2px solid #d8e0e5;
-      background: white;
-      border-radius: 12px;
-      padding: 14px;
-      font-size: 18px;
-      cursor: pointer;
-      text-align: center;
-    }
-
-    .timer-option.selected {
-      background: #e8f5e9;
-      border-color: #43a047;
-      color: #2e7d32;
-      font-weight: bold;
-    }
-
-    .start-button {
-      width: 100%;
-      border: none;
-      border-radius: 14px;
-      background: #2196f3;
-      color: white;
-      font-size: 22px;
-      font-weight: bold;
-      padding: 17px;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-
-    .start-button:hover {
-      background: #1976d2;
-    }
-
-    .start-button:disabled {
-      background: #b0bec5;
-      cursor: not-allowed;
-    }
-
-    .selected-info {
-      background: #f1f8e9;
-      border-radius: 10px;
-      padding: 12px 15px;
-      margin-top: 12px;
-      color: #33691e;
-      font-size: 14px;
-    }
-
-    /* =========================
-       ASSESSMENT
-    ========================= */
-
-    #assessmentScreen,
-    #resultsScreen {
-      display: none;
-    }
-
-    .assessment-top {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .stat-box {
-      background: #f8fafc;
-      border-radius: 12px;
-      padding: 14px;
-      text-align: center;
-      border: 1px solid #e1e8ed;
-    }
-
-    .stat-label {
-      font-size: 13px;
-      color: #78909c;
-      margin-bottom: 5px;
-    }
-
-    .stat-value {
-      font-size: 25px;
-      font-weight: bold;
-    }
-
-    .timer-display {
-      font-size: 32px;
-      color: #d32f2f;
-    }
-
-    .timer-display.warning {
-      color: #f57c00;
-    }
-
-    .timer-display.safe {
-      color: #388e3c;
-    }
-
-    .progress-container {
-      background: #e0e0e0;
-      height: 10px;
-      border-radius: 10px;
-      overflow: hidden;
-      margin: 15px 0 25px;
-    }
-
-    .progress-bar {
-      height: 100%;
-      width: 100%;
-      background: #43a047;
-      transition: width 1s linear;
-    }
-
-    .word-card {
-      text-align: center;
-      padding: 35px 20px 30px;
-      border: 2px solid #e3e8ec;
-      border-radius: 18px;
-      background: #ffffff;
-    }
-
-    .word-number {
-      font-size: 15px;
-      color: #78909c;
-      margin-bottom: 10px;
-    }
-
-    .pattern-label {
-      display: inline-block;
-      background: #e3f2fd;
-      color: #1565c0;
-      padding: 7px 15px;
-      border-radius: 20px;
-      font-weight: bold;
-      margin-bottom: 20px;
-      font-size: 15px;
-    }
-
-    .current-word {
-      font-size: clamp(60px, 12vw, 120px);
-      font-weight: bold;
-      line-height: 1.1;
-      margin: 10px 0 25px;
-      color: #263238;
-      letter-spacing: 2px;
-    }
-
-    .attempt-info {
-      min-height: 28px;
-      color: #607d8b;
-      font-size: 16px;
-      margin-bottom: 18px;
-    }
-
-    .teacher-instruction {
-      background: #fff8e1;
-      color: #795548;
-      border-radius: 10px;
-      padding: 12px;
-      margin: 0 auto 20px;
-      max-width: 650px;
-      font-size: 15px;
-    }
-
-    .answer-buttons {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
-      max-width: 700px;
-      margin: 0 auto;
-    }
-
-    .answer-button {
-      border: none;
-      border-radius: 14px;
-      padding: 18px;
-      font-size: 21px;
-      font-weight: bold;
-      cursor: pointer;
-      color: white;
-    }
-
-    .correct-button {
-      background: #43a047;
-    }
-
-    .correct-button:hover {
-      background: #2e7d32;
-    }
-
-    .incorrect-button {
-      background: #e53935;
-    }
-
-    .incorrect-button:hover {
-      background: #c62828;
-    }
-
-    .skip-button {
-      background: #fb8c00;
-    }
-
-    .skip-button:hover {
-      background: #ef6c00;
-    }
-
-    .assessment-controls {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-top: 20px;
-    }
-
-    .control-button {
-      border: none;
-      border-radius: 10px;
-      padding: 11px 20px;
-      cursor: pointer;
-      font-size: 15px;
-      background: #eceff1;
-      color: #37474f;
-    }
-
-    .control-button:hover {
-      background: #cfd8dc;
-    }
-
-    .end-button {
-      background: #ffebee;
-      color: #c62828;
-    }
-
-    .end-button:hover {
-      background: #ffcdd2;
-    }
-
-    /* =========================
-       RESULTS
-    ========================= */
-
-    .result-summary {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-bottom: 25px;
-    }
-
-    .result-box {
-      background: #f8fafc;
-      border: 1px solid #e1e8ed;
-      border-radius: 12px;
-      text-align: center;
-      padding: 18px 10px;
-    }
-
-    .result-number {
-      font-size: 30px;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-
-    .result-label {
-      font-size: 13px;
-      color: #607d8b;
-    }
-
-    .results-table-wrapper {
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-
-    th,
-    td {
-      padding: 12px;
-      border-bottom: 1px solid #e5e9ec;
-      text-align: left;
-    }
-
-    th {
-      background: #f5f7f9;
-      font-weight: bold;
-    }
-
-    .result-correct {
-      color: #2e7d32;
-      font-weight: bold;
-    }
-
-    .result-skipped {
-      color: #ef6c00;
-      font-weight: bold;
-    }
-
-    .results-buttons {
-      display: flex;
-      gap: 12px;
-      margin-top: 25px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .restart-button {
-      background: #2196f3;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      padding: 13px 25px;
-      cursor: pointer;
-      font-size: 16px;
-      font-weight: bold;
-    }
-
-    .restart-button:hover {
-      background: #1976d2;
-    }
-
-    /* =========================
-       PAUSED
-    ========================= */
-
-    .paused-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.55);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    .paused-box {
-      background: white;
-      border-radius: 18px;
-      padding: 35px;
-      text-align: center;
-      max-width: 400px;
-      width: 100%;
-    }
-
-    .paused-box h2 {
-      margin-top: 0;
-    }
-
-    .resume-button {
-      border: none;
-      border-radius: 10px;
-      padding: 13px 25px;
-      background: #43a047;
-      color: white;
-      font-size: 17px;
-      cursor: pointer;
-    }
-
-    /* =========================
-       RESPONSIVE
-    ========================= */
-
-    @media (max-width: 700px) {
-      .container {
-        padding: 15px;
-      }
-
-      h1 {
-        font-size: 28px;
-      }
-
-      .assessment-top {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .assessment-top .stat-box:last-child {
-        grid-column: span 2;
-      }
-
-      .result-summary {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .answer-buttons {
-        grid-template-columns: 1fr;
-      }
-
-      .current-word {
-        font-size: 65px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Phonics Reading Assessment</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f4f7fb;
+  color: #263238;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 25px;
+}
+
+h1 {
+  text-align: center;
+  margin: 0 0 8px;
+  color: #1565c0;
+  font-size: 32px;
+}
+
+.subtitle {
+  text-align: center;
+  color: #607d8b;
+  margin-bottom: 25px;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 22px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+}
+
+.card h2 {
+  margin-top: 0;
+  color: #1565c0;
+  font-size: 22px;
+}
+
+/* =========================
+   PHONICS GROUP
+========================= */
+
+.phonics-group {
+  margin-bottom: 28px;
+}
+
+.group-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.group-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #37474f;
+}
+
+.group-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.small-btn {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 13px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.select-all-btn {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.clear-btn {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.small-btn:hover {
+  opacity: 0.85;
+}
+
+/* =========================
+   CATEGORY GRID
+========================= */
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+.category-item {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.category-button {
+  width: 100%;
+  min-height: 48px;
+  border: 2px solid #cfd8dc;
+  background: #fafafa;
+  color: #37474f;
+  border-radius: 10px;
+  padding: 11px 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.category-button:hover {
+  border-color: #90caf9;
+  background: #f5faff;
+}
+
+/* =========================
+   SELECTED CATEGORY
+========================= */
+
+.category-button.selected {
+  background: #e3f2fd;
+  border: 3px solid #1976d2;
+  color: #0d47a1;
+
+  /* Bigger and clearer */
+  font-size: 18px;
+  font-weight: 800;
+
+  /* Make the selection stand out */
+  box-shadow: 0 3px 9px rgba(25,118,210,0.20);
+}
+
+/* =========================
+   PRACTICE DROPDOWN
+========================= */
+
+.practice-select {
+  width: 100%;
+  min-height: 38px;
+  border: 1px solid #cfd8dc;
+  border-radius: 8px;
+  padding: 7px 8px;
+  background: white;
+  color: #455a64;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.practice-select:focus {
+  outline: 2px solid #90caf9;
+}
+
+/* =========================
+   TIMER
+========================= */
+
+.timer-options {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+
+.timer-button {
+  border: 2px solid #cfd8dc;
+  background: #fafafa;
+  border-radius: 10px;
+  padding: 14px 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #455a64;
+  transition: all 0.18s ease;
+}
+
+.timer-button:hover {
+  border-color: #90caf9;
+}
+
+.timer-button.selected {
+  background: #e3f2fd;
+  border: 3px solid #1976d2;
+  color: #0d47a1;
+  font-size: 19px;
+  font-weight: 800;
+  box-shadow: 0 3px 9px rgba(25,118,210,0.20);
+}
+
+/* =========================
+   START BUTTON
+========================= */
+
+.start-button {
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: 17px;
+  background: #1976d2;
+  color: white;
+  font-size: 20px;
+  font-weight: 800;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.start-button:hover {
+  background: #1565c0;
+}
+
+.start-button:disabled {
+  background: #b0bec5;
+  cursor: not-allowed;
+}
+
+/* =========================
+   ASSESSMENT
+========================= */
+
+.assessment-screen {
+  display: none;
+}
+
+.progress-area {
+  margin-bottom: 20px;
+}
+
+.progress-text {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #607d8b;
+  margin-bottom: 8px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 12px;
+  background: #eceff1;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: #42a5f5;
+  transition: width 0.2s ease;
+}
+
+.timer-display {
+  text-align: center;
+  font-size: 48px;
+  font-weight: 800;
+  color: #1565c0;
+  margin: 10px 0 25px;
+}
+
+.timer-display.warning {
+  color: #ef6c00;
+}
+
+.timer-display.danger {
+  color: #c62828;
+}
+
+/* =========================
+   WORD
+========================= */
+
+.word-card {
+  text-align: center;
+  padding: 35px 20px;
+  background: #f8fbff;
+  border: 2px solid #e3f2fd;
+  border-radius: 18px;
+  margin-bottom: 22px;
+}
+
+.word-label {
+  color: #78909c;
+  font-size: 15px;
+  margin-bottom: 15px;
+}
+
+.current-word {
+  font-size: 76px;
+  line-height: 1;
+  font-weight: 900;
+  color: #263238;
+  margin: 15px 0;
+  letter-spacing: 2px;
+}
+
+.word-category {
+  color: #1976d2;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+/* =========================
+   ASSESSMENT BUTTONS
+========================= */
+
+.assessment-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+}
+
+.assess-btn {
+  border: none;
+  border-radius: 12px;
+  padding: 18px 10px;
+  color: white;
+  font-size: 19px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.correct-btn {
+  background: #2e7d32;
+}
+
+.correct-btn:hover {
+  background: #1b5e20;
+}
+
+.incorrect-btn {
+  background: #c62828;
+}
+
+.incorrect-btn:hover {
+  background: #b71c1c;
+}
+
+.skip-btn {
+  background: #607d8b;
+}
+
+.skip-btn:hover {
+  background: #455a64;
+}
+
+/* =========================
+   ATTEMPT INFO
+========================= */
+
+.attempt-info {
+  text-align: center;
+  margin-top: 15px;
+  color: #607d8b;
+  font-size: 14px;
+}
+
+.retry-message {
+  min-height: 25px;
+  text-align: center;
+  font-weight: 700;
+  margin-top: 12px;
+}
+
+.retry-message.correct {
+  color: #2e7d32;
+}
+
+.retry-message.incorrect {
+  color: #c62828;
+}
+
+/* =========================
+   RESULTS
+========================= */
+
+.results-screen {
+  display: none;
+}
+
+.result-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 25px;
+}
+
+.result-box {
+  background: #f5faff;
+  border: 2px solid #e3f2fd;
+  border-radius: 12px;
+  padding: 18px 10px;
+  text-align: center;
+}
+
+.result-number {
+  font-size: 28px;
+  font-weight: 900;
+  color: #1565c0;
+}
+
+.result-label {
+  color: #607d8b;
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+/* =========================
+   RESULTS TABLE
+========================= */
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.results-table th,
+.results-table td {
+  padding: 10px;
+  border-bottom: 1px solid #eceff1;
+  text-align: left;
+}
+
+.results-table th {
+  background: #f5f7f9;
+  color: #455a64;
+}
+
+.status-correct {
+  color: #2e7d32;
+  font-weight: 800;
+}
+
+.status-incorrect {
+  color: #c62828;
+  font-weight: 800;
+}
+
+.status-skipped {
+  color: #607d8b;
+  font-weight: 800;
+}
+
+/* =========================
+   RESULTS BUTTONS
+========================= */
+
+.result-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.secondary-button {
+  flex: 1;
+  border: 2px solid #1976d2;
+  border-radius: 10px;
+  background: white;
+  color: #1565c0;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.secondary-button:hover {
+  background: #e3f2fd;
+}
+
+/* =========================
+   EMPTY MESSAGE
+========================= */
+
+.no-selection {
+  color: #c62828;
+  font-weight: 700;
+  text-align: center;
+  margin-top: 10px;
+  display: none;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 750px) {
+
+  .container {
+    padding: 15px;
+  }
+
+  h1 {
+    font-size: 26px;
+  }
+
+  .timer-options {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .assessment-buttons {
+    grid-template-columns: 1fr;
+  }
+
+  .result-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .current-word {
+    font-size: 55px;
+  }
+}
+
+@media (max-width: 500px) {
+
+  .category-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .timer-options {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .current-word {
+    font-size: 45px;
+  }
+}
+</style>
 </head>
 
 <body>
@@ -527,156 +562,491 @@
 
   <!-- =========================
        SETUP SCREEN
-  ========================= -->
+  ========================== -->
 
   <div id="setupScreen">
 
     <h1>Phonics Reading Assessment</h1>
+
     <div class="subtitle">
-      Select the phonics categories and assessment time.
+      Select the phonics categories you want to assess.
     </div>
 
-    <div class="card">
+    <!-- SHORT A -->
 
-      <div class="section-title">1. Select Phonics Categories</div>
+    <div class="card phonics-group">
 
-      <div class="selection-controls">
-        <button class="small-button" onclick="selectAll()">Select All</button>
-        <button class="small-button" onclick="clearAll()">Clear All</button>
+      <div class="group-header">
+        <div class="group-title">Short A</div>
+
+        <div class="group-controls">
+          <button class="small-btn select-all-btn"
+                  onclick="selectGroup('shortA')">
+            Select All Short A
+          </button>
+
+          <button class="small-btn clear-btn"
+                  onclick="clearGroup('shortA')">
+            Clear Short A
+          </button>
+        </div>
       </div>
 
-      <div class="category-section">
+      <div class="category-grid">
 
-        <!-- SHORT VOWELS -->
+        <div class="category-item">
+          <button class="category-button"
+                  data-category="ap"
+                  onclick="toggleCategory('ap')">
+            -ap
+          </button>
 
-        <div class="category-group">
-          <h3>Short A</h3>
-          <div class="category-grid">
-            <button class="category-button" data-category="ap" onclick="toggleCategory(this)">-ap</button>
-            <button class="category-button" data-category="ad" onclick="toggleCategory(this)">-ad</button>
-            <button class="category-button" data-category="an" onclick="toggleCategory(this)">-an</button>
-            <button class="category-button" data-category="at" onclick="toggleCategory(this)">-at</button>
-          </div>
+          <select class="practice-select"
+                  onchange="showPracticeWord(this)">
+            <option value="">Practice -ap words</option>
+          </select>
         </div>
 
-        <div class="category-group">
-          <h3>Short E</h3>
-          <div class="category-grid">
-            <button class="category-button" data-category="ed" onclick="toggleCategory(this)">-ed</button>
-            <button class="category-button" data-category="eg" onclick="toggleCategory(this)">-eg</button>
-            <button class="category-button" data-category="et" onclick="toggleCategory(this)">-et</button>
-            <button class="category-button" data-category="en" onclick="toggleCategory(this)">-en</button>
-          </div>
+        <div class="category-item">
+          <button class="category-button"
+                  data-category="ad"
+                  onclick="toggleCategory('ad')">
+            -ad
+          </button>
+
+          <select class="practice-select"
+                  onchange="showPracticeWord(this)">
+            <option value="">Practice -ad words</option>
+          </select>
         </div>
 
-        <div class="category-group">
-          <h3>Short I</h3>
-          <div class="category-grid">
-            <button class="category-button" data-category="ig" onclick="toggleCategory(this)">-ig</button>
-            <button class="category-button" data-category="in" onclick="toggleCategory(this)">-in</button>
-            <button class="category-button" data-category="it" onclick="toggleCategory(this)">-it</button>
-            <button class="category-button" data-category="ip" onclick="toggleCategory(this)">-ip</button>
-          </div>
+        <div class="category-item">
+          <button class="category-button"
+                  data-category="an"
+                  onclick="toggleCategory('an')">
+            -an
+          </button>
+
+          <select class="practice-select"
+                  onchange="showPracticeWord(this)">
+            <option value="">Practice -an words</option>
+          </select>
         </div>
 
-        <div class="category-group">
-          <h3>Short O</h3>
-          <div class="category-grid">
-            <button class="category-button" data-category="og" onclick="toggleCategory(this)">-og</button>
-            <button class="category-button" data-category="op" onclick="toggleCategory(this)">-op</button>
-            <button class="category-button" data-category="ot" onclick="toggleCategory(this)">-ot</button>
-            <button class="category-button" data-category="ox" onclick="toggleCategory(this)">-ox</button>
-          </div>
-        </div>
+        <div class="category-item">
+          <button class="category-button"
+                  data-category="at"
+                  onclick="toggleCategory('at')">
+            -at
+          </button>
 
-        <div class="category-group">
-          <h3>Short U</h3>
-          <div class="category-grid">
-            <button class="category-button" data-category="ug" onclick="toggleCategory(this)">-ug</button>
-            <button class="category-button" data-category="un" onclick="toggleCategory(this)">-un</button>
-            <button class="category-button" data-category="ut" onclick="toggleCategory(this)">-ut</button>
-            <button class="category-button" data-category="ub" onclick="toggleCategory(this)">-ub</button>
-          </div>
-        </div>
-
-        <!-- BLENDS -->
-
-        <div class="category-group">
-          <h3>Beginning Consonant Blends</h3>
-          <div class="category-grid">
-            <button class="category-button" data-category="bl" onclick="toggleCategory(this)">bl</button>
-            <button class="category-button" data-category="cl" onclick="toggleCategory(this)">cl</button>
-            <button class="category-button" data-category="fl" onclick="toggleCategory(this)">fl</button>
-            <button class="category-button" data-category="gl" onclick="toggleCategory(this)">gl</button>
-            <button class="category-button" data-category="pl" onclick="toggleCategory(this)">pl</button>
-            <button class="category-button" data-category="sl" onclick="toggleCategory(this)">sl</button>
-
-            <button class="category-button" data-category="sc" onclick="toggleCategory(this)">sc</button>
-            <button class="category-button" data-category="sk" onclick="toggleCategory(this)">sk</button>
-            <button class="category-button" data-category="sm" onclick="toggleCategory(this)">sm</button>
-            <button class="category-button" data-category="sn" onclick="toggleCategory(this)">sn</button>
-            <button class="category-button" data-category="sp" onclick="toggleCategory(this)">sp</button>
-            <button class="category-button" data-category="st" onclick="toggleCategory(this)">st</button>
-
-            <button class="category-button" data-category="br" onclick="toggleCategory(this)">br</button>
-            <button class="category-button" data-category="cr" onclick="toggleCategory(this)">cr</button>
-            <button class="category-button" data-category="dr" onclick="toggleCategory(this)">dr</button>
-            <button class="category-button" data-category="fr" onclick="toggleCategory(this)">fr</button>
-            <button class="category-button" data-category="gr" onclick="toggleCategory(this)">gr</button>
-            <button class="category-button" data-category="pr" onclick="toggleCategory(this)">pr</button>
-            <button class="category-button" data-category="tr" onclick="toggleCategory(this)">tr</button>
-          </div>
-        </div>
-
-        <!-- DIGRAPHS -->
-
-        <div class="category-group">
-          <h3>Digraphs</h3>
-          <div class="category-grid">
-            <button class="category-button" data-category="ch" onclick="toggleCategory(this)">ch</button>
-            <button class="category-button" data-category="ck" onclick="toggleCategory(this)">ck</button>
-            <button class="category-button" data-category="ng" onclick="toggleCategory(this)">ng</button>
-            <button class="category-button" data-category="ph" onclick="toggleCategory(this)">ph</button>
-            <button class="category-button" data-category="qu" onclick="toggleCategory(this)">qu</button>
-            <button class="category-button" data-category="sh" onclick="toggleCategory(this)">sh</button>
-            <button class="category-button" data-category="th" onclick="toggleCategory(this)">th</button>
-            <button class="category-button" data-category="wh" onclick="toggleCategory(this)">wh</button>
-          </div>
+          <select class="practice-select"
+                  onchange="showPracticeWord(this)">
+            <option value="">Practice -at words</option>
+          </select>
         </div>
 
       </div>
+    </div>
 
-      <div id="selectedInfo" class="selected-info">
-        No categories selected.
+
+    <!-- SHORT E -->
+
+    <div class="card phonics-group">
+
+      <div class="group-header">
+        <div class="group-title">Short E</div>
+
+        <div class="group-controls">
+          <button class="small-btn select-all-btn"
+                  onclick="selectGroup('shortE')">
+            Select All Short E
+          </button>
+
+          <button class="small-btn clear-btn"
+                  onclick="clearGroup('shortE')">
+            Clear Short E
+          </button>
+        </div>
       </div>
+
+      <div class="category-grid">
+
+        <div class="category-item">
+          <button class="category-button"
+                  data-category="ed"
+                  onclick="toggleCategory('ed')">
+            -ed
+          </button>
+
+          <select class="practice-select"
+                  onchange="showPracticeWord(this)">
+            <option value="">Practice -ed words</option>
+          </select>
+        </div>
+
+        <div class="category-item">
+          <button class="category-button"
+                  data-category="eg"
+                  onclick="toggleCategory('eg')">
+            -eg
+          </button>
+
+          <select class="practice-select"
+                  onchange="showPracticeWord(this)">
+            <option value="">Practice -eg words</option>
+          </select>
+        </div>
+
+        <div class="category-item">
+          <button class="category-button"
+                  data-category="et"
+                  onclick="toggleCategory('et')">
+            -et
+          </button>
+
+          <select class="practice-select"
+                  onchange="showPracticeWord(this)">
+            <option value="">Practice -et words</option>
+          </select>
+        </div>
+
+        <div class="category-item">
+          <button class="category-button"
+                  data-category="en"
+                  onclick="toggleCategory('en')">
+            -en
+          </button>
+
+          <select class="practice-select"
+                  onchange="showPracticeWord(this)">
+            <option value="">Practice -en words</option>
+          </select>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- SHORT I -->
+
+    <div class="card phonics-group">
+
+      <div class="group-header">
+        <div class="group-title">Short I</div>
+
+        <div class="group-controls">
+          <button class="small-btn select-all-btn"
+                  onclick="selectGroup('shortI')">
+            Select All Short I
+          </button>
+
+          <button class="small-btn clear-btn"
+                  onclick="clearGroup('shortI')">
+            Clear Short I
+          </button>
+        </div>
+      </div>
+
+      <div class="category-grid">
+
+        <div class="category-item">
+          <button class="category-button"
+                  data-category="ig"
+                  onclick="toggleCategory('ig')">
+            -ig
+          </button>
+
+          <select class="practice-select"
+                  onchange="showPracticeWord(this)">
+            <option value="">Practice -ig words</option>
+          </select>
+        </div>
+
+        <div class="category-item">
+          <button class="category-button"
+                  data-category="in"
+                  onclick="toggleCategory('in')">
+            -in
+          </button>
+
+          <select class="practice-select"
+                  onchange="showPracticeWord(this)">
+            <option value="">Practice -in words</option>
+          </select>
+        </div>
+
+        <div class="category-item">
+          <button class="category-button"
+                  data-category="it"
+                  onclick="toggleCategory('it')">
+            -it
+          </button>
+
+          <select class="practice-select"
+                  onchange="showPracticeWord(this)">
+            <option value="">Practice -it words</option>
+          </select>
+        </div>
+
+        <div class="category-item">
+          <button class="category-button"
+                  data-category="ip"
+                  onclick="toggleCategory('ip')">
+            -ip
+          </button>
+
+          <select class="practice-select"
+                  onchange="showPracticeWord(this)">
+            <option value="">Practice -ip words</option>
+          </select>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- SHORT O -->
+
+    <div class="card phonics-group">
+
+      <div class="group-header">
+        <div class="group-title">Short O</div>
+
+        <div class="group-controls">
+          <button class="small-btn select-all-btn"
+                  onclick="selectGroup('shortO')">
+            Select All Short O
+          </button>
+
+          <button class="small-btn clear-btn"
+                  onclick="clearGroup('shortO')">
+            Clear Short O
+          </button>
+        </div>
+      </div>
+
+      <div class="category-grid">
+
+        <div class="category-item">
+          <button class="category-button"
+                  data-category="og"
+                  onclick="toggleCategory('og')">
+            -og
+          </button>
+
+          <select class="practice-select"
+                  onchange="showPracticeWord(this)">
+            <option value="">Practice -og words</option>
+          </select>
+        </div>
+
+        <div class="category-item">
+          <button class="category-button"
+                  data-category="op"
+                  onclick="toggleCategory('op')">
+            -op
+          </button>
+
+          <select class="practice-select"
+                  onchange="showPracticeWord(this)">
+            <option value="">Practice -op words</option>
+          </select>
+        </div>
+
+        <div class="category-item">
+          <button class="category-button"
+                  data-category="ot"
+                  onclick="toggleCategory('ot')">
+            -ot
+          </button>
+
+          <select class="practice-select"
+                  onchange="showPracticeWord(this)">
+            <option value="">Practice -ot words</option>
+          </select>
+        </div>
+
+        <div class="category-item">
+          <button class="category-button"
+                  data-category="ox"
+                  onclick="toggleCategory('ox')">
+            -ox
+          </button>
+
+          <select class="practice-select"
+                  onchange="showPracticeWord(this)">
+            <option value="">Practice -ox words</option>
+          </select>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- SHORT U -->
+
+    <div class="card phonics-group">
+
+      <div class="group-header">
+        <div class="group-title">Short U</div>
+
+        <div class="group-controls">
+          <button class="small-btn select-all-btn"
+                  onclick="selectGroup('shortU')">
+            Select All Short U
+          </button>
+
+          <button class="small-btn clear-btn"
+                  onclick="clearGroup('shortU')">
+            Clear Short U
+          </button>
+        </div>
+      </div>
+
+      <div class="category-grid">
+
+        <div class="category-item">
+          <button class="category-button"
+                  data-category="ug"
+                  onclick="toggleCategory('ug')">
+            -ug
+          </button>
+
+          <select class="practice-select"
+                  onchange="showPracticeWord(this)">
+            <option value="">Practice -ug words</option>
+          </select>
+        </div>
+
+        <div class="category-item">
+          <button class="category-button"
+                  data-category="un"
+                  onclick="toggleCategory('un')">
+            -un
+          </button>
+
+          <select class="practice-select"
+                  onchange="showPracticeWord(this)">
+            <option value="">Practice -un words</option>
+          </select>
+        </div>
+
+        <div class="category-item">
+          <button class="category-button"
+                  data-category="ut"
+                  onclick="toggleCategory('ut')">
+            -ut
+          </button>
+
+          <select class="practice-select"
+                  onchange="showPracticeWord(this)">
+            <option value="">Practice -ut words</option>
+          </select>
+        </div>
+
+        <div class="category-item">
+          <button class="category-button"
+                  data-category="ub"
+                  onclick="toggleCategory('ub')">
+            -ub
+          </button>
+
+          <select class="practice-select"
+                  onchange="showPracticeWord(this)">
+            <option value="">Practice -ub words</option>
+          </select>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- BLENDS -->
+
+    <div class="card phonics-group">
+
+      <div class="group-header">
+        <div class="group-title">Consonant Blends</div>
+
+        <div class="group-controls">
+          <button class="small-btn select-all-btn"
+                  onclick="selectGroup('blends')">
+            Select All Blends
+          </button>
+
+          <button class="small-btn clear-btn"
+                  onclick="clearGroup('blends')">
+            Clear Blends
+          </button>
+        </div>
+      </div>
+
+      <div class="category-grid" id="blendsGrid"></div>
 
     </div>
+
+
+    <!-- DIGRAPHS -->
+
+    <div class="card phonics-group">
+
+      <div class="group-header">
+        <div class="group-title">Digraphs</div>
+
+        <div class="group-controls">
+          <button class="small-btn select-all-btn"
+                  onclick="selectGroup('digraphs')">
+            Select All Digraphs
+          </button>
+
+          <button class="small-btn clear-btn"
+                  onclick="clearGroup('digraphs')">
+            Clear Digraphs
+          </button>
+        </div>
+      </div>
+
+      <div class="category-grid" id="digraphsGrid"></div>
+
+    </div>
+
 
     <!-- TIMER -->
 
     <div class="card">
 
-      <div class="section-title">2. Choose Assessment Time</div>
+      <h2>Assessment Time</h2>
 
       <div class="timer-options">
 
-        <button class="timer-option" data-time="1" onclick="selectTimer(this)">
+        <button class="timer-button"
+                data-time="1"
+                onclick="selectTimer(1)">
           1 Minute
         </button>
 
-        <button class="timer-option" data-time="2" onclick="selectTimer(this)">
+        <button class="timer-button"
+                data-time="2"
+                onclick="selectTimer(2)">
           2 Minutes
         </button>
 
-        <button class="timer-option" data-time="3" onclick="selectTimer(this)">
+        <button class="timer-button"
+                data-time="3"
+                onclick="selectTimer(3)">
           3 Minutes
         </button>
 
-        <button class="timer-option" data-time="4" onclick="selectTimer(this)">
+        <button class="timer-button"
+                data-time="4"
+                onclick="selectTimer(4)">
           4 Minutes
         </button>
 
-        <button class="timer-option" data-time="5" onclick="selectTimer(this)">
+        <button class="timer-button selected"
+                data-time="5"
+                onclick="selectTimer(5)">
           5 Minutes
         </button>
 
@@ -684,129 +1054,88 @@
 
     </div>
 
-    <div class="card">
 
-      <button
-        id="startButton"
-        class="start-button"
-        onclick="startAssessment()"
-        disabled
-      >
-        Start Assessment
-      </button>
-
+    <div id="selectionMessage" class="no-selection">
+      Please select at least one phonics category.
     </div>
+
+    <button class="start-button"
+            onclick="startAssessment()">
+      Start Reading Assessment
+    </button>
 
   </div>
 
 
   <!-- =========================
        ASSESSMENT SCREEN
-  ========================= -->
+  ========================== -->
 
-  <div id="assessmentScreen">
-
-    <h1>Reading Assessment</h1>
-
-    <div class="assessment-top">
-
-      <div class="stat-box">
-        <div class="stat-label">Time Remaining</div>
-        <div id="timerDisplay" class="stat-value timer-display">
-          01:00
-        </div>
-      </div>
-
-      <div class="stat-box">
-        <div class="stat-label">Words Correct</div>
-        <div id="correctDisplay" class="stat-value">
-          0
-        </div>
-      </div>
-
-      <div class="stat-box">
-        <div class="stat-label">Current Word</div>
-        <div id="wordCountDisplay" class="stat-value">
-          1
-        </div>
-      </div>
-
-    </div>
-
-    <div class="progress-container">
-      <div id="progressBar" class="progress-bar"></div>
-    </div>
+  <div id="assessmentScreen" class="assessment-screen">
 
     <div class="card">
 
-      <div class="word-card">
+      <div class="progress-area">
 
-        <div id="wordNumber" class="word-number">
-          Word 1
+        <div class="progress-text">
+          <span id="progressText">Word 1</span>
+          <span id="categoryProgress">0 / 0</span>
         </div>
 
-        <div id="patternLabel" class="pattern-label">
-          -ap
-        </div>
-
-        <div id="currentWord" class="current-word">
-          cat
-        </div>
-
-        <div id="attemptInfo" class="attempt-info">
-          First attempt
-        </div>
-
-        <div class="teacher-instruction">
-          Ask the student to read the word aloud.
-          Then select <strong>Correct</strong> if they read it correctly.
-          Select <strong>Incorrect</strong> if they need to try again.
-        </div>
-
-        <div class="answer-buttons">
-
-          <button
-            class="answer-button correct-button"
-            onclick="markCorrect()"
-          >
-            ✓ Correct
-          </button>
-
-          <button
-            class="answer-button incorrect-button"
-            onclick="markIncorrect()"
-          >
-            ✗ Incorrect
-          </button>
-
-          <button
-            class="answer-button skip-button"
-            onclick="skipWord()"
-          >
-            → Skip Word
-          </button>
-
+        <div class="progress-bar">
+          <div id="progressFill" class="progress-fill"></div>
         </div>
 
       </div>
 
-      <div class="assessment-controls">
+      <div id="timerDisplay" class="timer-display">
+        05:00
+      </div>
 
-        <button
-          id="pauseButton"
-          class="control-button"
-          onclick="pauseAssessment()"
-        >
-          ⏸ Pause
+      <div class="word-card">
+
+        <div class="word-label">
+          Read this word:
+        </div>
+
+        <div id="currentWord"
+             class="current-word">
+          word
+        </div>
+
+        <div id="currentCategory"
+             class="word-category">
+          category
+        </div>
+
+      </div>
+
+      <div class="assessment-buttons">
+
+        <button class="assess-btn correct-btn"
+                onclick="markCorrect()">
+          ✓ Correct
         </button>
 
-        <button
-          class="control-button end-button"
-          onclick="endAssessment()"
-        >
-          End Assessment
+        <button class="assess-btn incorrect-btn"
+                onclick="markIncorrect()">
+          ✕ Incorrect
         </button>
 
+        <button class="assess-btn skip-btn"
+                onclick="skipWord()">
+          → Skip
+        </button>
+
+      </div>
+
+      <div id="attemptInfo"
+           class="attempt-info">
+        Attempts: 0
+      </div>
+
+      <div id="retryMessage"
+           class="retry-message">
       </div>
 
     </div>
@@ -816,91 +1145,99 @@
 
   <!-- =========================
        RESULTS SCREEN
-  ========================= -->
+  ========================== -->
 
-  <div id="resultsScreen">
-
-    <h1>Assessment Results</h1>
-
-    <div class="subtitle">
-      Reading assessment summary
-    </div>
+  <div id="resultsScreen" class="results-screen">
 
     <div class="card">
 
-      <div class="result-summary">
+      <h1>Assessment Results</h1>
+
+      <div class="result-grid">
 
         <div class="result-box">
-          <div id="resultCorrect" class="result-number">
+          <div id="resultCorrect"
+               class="result-number">
             0
           </div>
+
           <div class="result-label">
             Words Correct
           </div>
         </div>
 
         <div class="result-box">
-          <div id="resultTotal" class="result-number">
+          <div id="resultCompleted"
+               class="result-number">
             0
           </div>
+
           <div class="result-label">
-            Words Completed
+            Completed Words
           </div>
         </div>
 
         <div class="result-box">
-          <div id="resultAccuracy" class="result-number">
+          <div id="resultAccuracy"
+               class="result-number">
             0%
           </div>
+
           <div class="result-label">
             Accuracy
           </div>
         </div>
 
         <div class="result-box">
-          <div id="resultWPM" class="result-number">
+          <div id="resultWPM"
+               class="result-number">
             0
           </div>
+
           <div class="result-label">
-            Words Correct / Minute
+            Words Correct / Min
           </div>
         </div>
 
-      </div>
-
-      <div class="result-summary">
-
         <div class="result-box">
-          <div id="resultTime" class="result-number">
+          <div id="resultTime"
+               class="result-number">
             0:00
           </div>
+
           <div class="result-label">
             Time Used
           </div>
         </div>
 
         <div class="result-box">
-          <div id="resultAttempts" class="result-number">
+          <div id="resultAttempts"
+               class="result-number">
             0
           </div>
+
           <div class="result-label">
             Total Attempts
           </div>
         </div>
 
         <div class="result-box">
-          <div id="resultSkipped" class="result-number">
+          <div id="resultSkipped"
+               class="result-number">
             0
           </div>
+
           <div class="result-label">
-            Words Skipped
+            Skipped
           </div>
         </div>
 
         <div class="result-box">
-          <div id="resultCategories" class="result-number">
+          <div id="resultCategories"
+               class="result-number">
             0
           </div>
+
           <div class="result-label">
             Categories
           </div>
@@ -908,69 +1245,38 @@
 
       </div>
 
-      <div class="section-title">
-        Detailed Results
-      </div>
+      <h2>Detailed Results</h2>
 
-      <div class="results-table-wrapper">
+      <div class="table-wrapper">
 
-        <table>
+        <table class="results-table">
 
           <thead>
             <tr>
               <th>#</th>
               <th>Word</th>
-              <th>Pattern</th>
+              <th>Category</th>
               <th>Attempts</th>
               <th>Result</th>
             </tr>
           </thead>
 
-          <tbody id="resultsTableBody">
-          </tbody>
+          <tbody id="resultsTableBody"></tbody>
 
         </table>
 
       </div>
 
-      <div class="results-buttons">
+      <div class="result-actions">
 
-        <button
-          class="restart-button"
-          onclick="restartAssessment()"
-        >
-          Start New Assessment
+        <button class="secondary-button"
+                onclick="restartAssessment()">
+          New Assessment
         </button>
 
       </div>
 
     </div>
-
-  </div>
-
-</div>
-
-
-<!-- =========================
-     PAUSED OVERLAY
-========================= -->
-
-<div id="pausedOverlay" class="paused-overlay">
-
-  <div class="paused-box">
-
-    <h2>Assessment Paused</h2>
-
-    <p>
-      The timer is paused. Resume when you are ready.
-    </p>
-
-    <button
-      class="resume-button"
-      onclick="resumeAssessment()"
-    >
-      ▶ Resume
-    </button>
 
   </div>
 
@@ -988,603 +1294,1193 @@ const wordDatabase = {
   /* SHORT A */
 
   ap: [
-    "cap",
-    "gap",
-    "lap",
-    "map",
-    "nap",
-    "rap",
-    "sap",
-    "tap"
+    "cap","gap","lap","map","nap","rap","sap","tap"
   ],
 
   ad: [
-    "bad",
-    "dad",
-    "had",
-    "lad",
-    "mad",
-    "pad",
-    "sad"
+    "bad","dad","had","lad","mad","pad","sad"
   ],
 
   an: [
-    "can",
-    "fan",
-    "man",
-    "pan",
-    "ran",
-    "tan",
-    "van"
+    "can","fan","man","pan","ran","tan","van"
   ],
 
   at: [
-    "bat",
-    "cat",
-    "fat",
-    "hat",
-    "mat",
-    "pat",
-    "rat",
-    "sat"
+    "bat","cat","fat","hat","mat","pat","rat","sat"
   ],
 
 
   /* SHORT E */
 
   ed: [
-    "bed",
-    "fed",
-    "led",
-    "red"
+    "bed","fed","led","red"
   ],
 
   eg: [
-    "beg",
-    "leg",
-    "peg"
+    "beg","leg","peg"
   ],
 
   et: [
-    "bet",
-    "get",
-    "jet",
-    "let",
-    "met",
-    "net",
-    "pet",
-    "set",
-    "wet"
+    "bet","get","jet","let","met","net","pet","set","wet"
   ],
 
   en: [
-    "den",
-    "hen",
-    "men",
-    "pen",
-    "ten"
+    "den","hen","men","pen","ten"
   ],
 
 
   /* SHORT I */
 
   ig: [
-    "big",
-    "dig",
-    "fig",
-    "pig",
-    "rig",
-    "wig"
+    "big","dig","fig","pig","rig","wig"
   ],
 
   in: [
-    "bin",
-    "fin",
-    "kin",
-    "pin",
-    "sin",
-    "tin",
-    "win"
+    "bin","fin","kin","pin","sin","tin","win"
   ],
 
   it: [
-    "bit",
-    "fit",
-    "hit",
-    "kit",
-    "lit",
-    "pit",
-    "sit"
+    "bit","fit","hit","kit","lit","pit","sit"
   ],
 
   ip: [
-    "dip",
-    "hip",
-    "lip",
-    "nip",
-    "rip",
-    "sip",
-    "tip",
-    "zip"
+    "dip","hip","lip","nip","rip","sip","tip","zip"
   ],
 
 
   /* SHORT O */
 
   og: [
-    "dog",
-    "fog",
-    "hog",
-    "jog",
-    "log"
+    "dog","fog","hog","jog","log"
   ],
 
   op: [
-    "cop",
-    "hop",
-    "mop",
-    "pop",
-    "top"
+    "cop","hop","mop","pop","top"
   ],
 
   ot: [
-    "cot",
-    "dot",
-    "got",
-    "hot",
-    "lot",
-    "pot",
-    "rot"
+    "cot","dot","got","hot","lot","pot","rot"
   ],
 
   ox: [
-    "box",
-    "fox"
+    "box","fox"
   ],
 
 
   /* SHORT U */
 
   ug: [
-    "bug",
-    "dug",
-    "hug",
-    "jug",
-    "mug",
-    "rug"
+    "bug","dug","hug","jug","mug","rug"
   ],
 
   un: [
-    "bun",
-    "fun",
-    "gun",
-    "run",
-    "sun"
+    "bun","fun","gun","run","sun"
   ],
 
   ut: [
-    "but",
-    "cut",
-    "gut",
-    "hut",
-    "nut"
+    "but","cut","gut","hut","nut"
   ],
 
   ub: [
-    "cub",
-    "rub",
-    "tub"
+    "cub","rub","tub"
   ],
 
 
   /* BLENDS */
 
   bl: [
-    "black",
-    "blow",
-    "blue",
-    "block",
-    "blank"
+    "black","blow","blue","block","blank"
   ],
 
   cl: [
-    "clap",
-    "clip",
-    "club",
-    "clam",
-    "class"
+    "clap","clip","club","clam","class"
   ],
 
   fl: [
-    "flag",
-    "flat",
-    "flip",
-    "flop",
-    "fly"
+    "flag","flat","flip","flop","fly"
   ],
 
   gl: [
-    "glad",
-    "glass",
-    "globe",
-    "glum"
+    "glad","glass","globe","glum"
   ],
 
   pl: [
-    "plan",
-    "play",
-    "plug",
-    "plum"
+    "plan","play","plug","plum"
   ],
 
   sl: [
-    "slam",
-    "slap",
-    "slip",
-    "slim",
-    "slug"
+    "slam","slap","slip","slim","slug"
   ],
 
   sc: [
-    "scan",
-    "scab",
-    "scat",
-    "scam"
+    "scan","scab","scat","scam"
   ],
 
   sk: [
-    "skip",
-    "skin",
-    "skit",
-    "skate"
+    "skip","skin","skit","skate"
   ],
 
   sm: [
-    "smash",
-    "smell",
-    "smile",
-    "smog"
+    "smash","smell","smile","smog"
   ],
 
   sn: [
-    "snap",
-    "snip",
-    "snug",
-    "snow"
+    "snap","snip","snug","snow"
   ],
 
   sp: [
-    "spin",
-    "spot",
-    "spit",
-    "spill",
-    "spell"
+    "spin","spot","spit","spill","spell"
   ],
 
   st: [
-    "stand",
-    "stop",
-    "step",
-    "stick",
-    "stamp"
+    "stand","stop","step","stick","stamp"
   ],
 
   br: [
-    "brag",
-    "brat",
-    "brick",
-    "bring",
-    "brush"
+    "brag","brat","brick","bring","brush"
   ],
 
   cr: [
-    "crab",
-    "crack",
-    "crop",
-    "crib",
-    "crush"
+    "crab","crack","crop","crib","crush"
   ],
 
   dr: [
-    "drag",
-    "drop",
-    "drip",
-    "drum",
-    "dress"
+    "drag","drop","drip","drum","dress"
   ],
 
   fr: [
-    "frog",
-    "from",
-    "fresh",
-    "frill"
+    "frog","from","fresh","frill"
   ],
 
   gr: [
-    "grab",
-    "grass",
-    "grip",
-    "grin",
-    "grow"
+    "grab","grass","grip","grin","grow"
   ],
 
   pr: [
-    "press",
-    "print",
-    "prize",
-    "pram",
-    "prep"
+    "press","print","prize","pram","prep"
   ],
 
   tr: [
-    "trap",
-    "trip",
-    "tree",
-    "truck",
-    "train"
+    "trap","trip","tree","truck","train"
   ],
 
 
   /* DIGRAPHS */
 
   ch: [
-    "chat",
-    "chin",
-    "chip",
-    "chop",
-    "chest"
+    "chat","chin","chip","chop","chest"
   ],
 
   ck: [
-    "back",
-    "duck",
-    "kick",
-    "pack",
-    "sock"
+    "back","duck","kick","pack","sock"
   ],
 
   ng: [
-    "bang",
-    "king",
-    "ring",
-    "sing",
-    "song"
+    "bang","king","ring","sing","song"
   ],
 
   ph: [
-    "phone",
-    "photo",
-    "graph"
+    "phone","photo","graph"
   ],
 
   qu: [
-    "quit",
-    "quiz",
-    "quick",
-    "queen"
+    "quit","quiz","quick","queen"
   ],
 
   sh: [
-    "ship",
-    "shop",
-    "shut",
-    "fish",
-    "brush"
+    "ship","shop","shut","fish","brush"
   ],
 
   th: [
-    "that",
-    "this",
-    "thin",
-    "thick",
-    "bath"
+    "that","this","thin","thick","bath"
   ],
 
   wh: [
-    "when",
-    "whip",
-    "whale",
-    "wheel"
+    "when","whip","whale","wheel"
   ]
 
 };
 
 
 /* =========================================================
-   VARIABLES
+   CATEGORY GROUPS
 ========================================================= */
 
-let selectedCategories = [];
+const groups = {
 
-let selectedTimerMinutes = 0;
+  shortA: [
+    "ap","ad","an","at"
+  ],
 
-let wordPool = [];
+  shortE: [
+    "ed","eg","et","en"
+  ],
 
-let currentWordIndex = 0;
+  shortI: [
+    "ig","in","it","ip"
+  ],
 
-let currentWordData = null;
+  shortO: [
+    "og","op","ot","ox"
+  ],
+
+  shortU: [
+    "ug","un","ut","ub"
+  ],
+
+  blends: [
+    "bl","cl","fl","gl","pl","sl",
+    "sc","sk","sm","sn","sp","st",
+    "br","cr","dr","fr","gr","pr","tr"
+  ],
+
+  digraphs: [
+    "ch","ck","ng","ph","qu","sh","th","wh"
+  ]
+
+};
+
+
+/* =========================================================
+   CATEGORY NAMES
+========================================================= */
+
+const categoryNames = {
+
+  ap: "-ap",
+  ad: "-ad",
+  an: "-an",
+  at: "-at",
+
+  ed: "-ed",
+  eg: "-eg",
+  et: "-et",
+  en: "-en",
+
+  ig: "-ig",
+  in: "-in",
+  it: "-it",
+  ip: "-ip",
+
+  og: "-og",
+  op: "-op",
+  ot: "-ot",
+  ox: "-ox",
+
+  ug: "-ug",
+  un: "-un",
+  ut: "-ut",
+  ub: "-ub",
+
+  bl: "bl",
+  cl: "cl",
+  fl: "fl",
+  gl: "gl",
+  pl: "pl",
+  sl: "sl",
+  sc: "sc",
+  sk: "sk",
+  sm: "sm",
+  sn: "sn",
+  sp: "sp",
+  st: "st",
+  br: "br",
+  cr: "cr",
+  dr: "dr",
+  fr: "fr",
+  gr: "gr",
+  pr: "pr",
+  tr: "tr",
+
+  ch: "ch",
+  ck: "ck",
+  ng: "ng",
+  ph: "ph",
+  qu: "qu",
+  sh: "sh",
+  th: "th",
+  wh: "wh"
+
+};
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let selectedCategories = new Set();
+
+let selectedTime = 5;
+
+let assessmentWords = [];
+
+let currentIndex = 0;
 
 let currentAttempts = 0;
 
-let correctWords = 0;
-
 let totalAttempts = 0;
 
-let skippedWords = 0;
+let correctCount = 0;
 
-let assessmentResults = [];
+let skippedCount = 0;
+
+let assessmentStartTime = null;
 
 let timerInterval = null;
 
 let timeRemaining = 0;
 
-let totalAssessmentSeconds = 0;
+let results = [];
 
-let assessmentStartTime = null;
 
-let isPaused = false;
+/* =========================================================
+   INITIALISE PRACTICE DROPDOWNS
+========================================================= */
 
-let isAssessmentRunning = false;
+function initializePracticeDropdowns() {
+
+  const selects =
+    document.querySelectorAll(".practice-select");
+
+  selects.forEach(select => {
+
+    const button =
+      select.parentElement.querySelector(
+        ".category-button"
+      );
+
+    if (!button) return;
+
+    const category =
+      button.dataset.category;
+
+    const words =
+      wordDatabase[category] || [];
+
+    words.forEach(word => {
+
+      const option =
+        document.createElement("option");
+
+      option.value = word;
+      option.textContent = word;
+
+      select.appendChild(option);
+
+    });
+
+  });
+
+}
+
+
+/* =========================================================
+   CREATE BLEND / DIGRAPH CARDS
+========================================================= */
+
+function createDynamicCategories() {
+
+  createCategoryButtons(
+    "blendsGrid",
+    groups.blends
+  );
+
+  createCategoryButtons(
+    "digraphsGrid",
+    groups.digraphs
+  );
+
+}
+
+
+function createCategoryButtons(containerId, categories) {
+
+  const container =
+    document.getElementById(containerId);
+
+  categories.forEach(category => {
+
+    const item =
+      document.createElement("div");
+
+    item.className =
+      "category-item";
+
+    const button =
+      document.createElement("button");
+
+    button.className =
+      "category-button";
+
+    button.dataset.category =
+      category;
+
+    button.textContent =
+      categoryNames[category];
+
+    button.onclick = function() {
+      toggleCategory(category);
+    };
+
+
+    const select =
+      document.createElement("select");
+
+    select.className =
+      "practice-select";
+
+    select.innerHTML =
+      `<option value="">Practice ${categoryNames[category]} words</option>`;
+
+    select.onchange =
+      function() {
+        showPracticeWord(this);
+      };
+
+
+    wordDatabase[category].forEach(word => {
+
+      const option =
+        document.createElement("option");
+
+      option.value =
+        word;
+
+      option.textContent =
+        word;
+
+      select.appendChild(option);
+
+    });
+
+
+    item.appendChild(button);
+
+    item.appendChild(select);
+
+    container.appendChild(item);
+
+  });
+
+}
 
 
 /* =========================================================
    CATEGORY SELECTION
 ========================================================= */
 
-function toggleCategory(button) {
+function toggleCategory(category) {
 
-  const category = button.dataset.category;
+  if (selectedCategories.has(category)) {
 
-  if (selectedCategories.includes(category)) {
-
-    selectedCategories =
-      selectedCategories.filter(item => item !== category);
-
-    button.classList.remove("selected");
+    selectedCategories.delete(category);
 
   } else {
 
-    selectedCategories.push(category);
-
-    button.classList.add("selected");
+    selectedCategories.add(category);
 
   }
 
-  updateSelectedInfo();
-
-  updateStartButton();
+  updateCategoryDisplay();
 
 }
 
 
-function selectAll() {
+function selectGroup(groupName) {
 
-  const buttons =
-    document.querySelectorAll(".category-button");
+  groups[groupName].forEach(category => {
 
-  selectedCategories = [];
-
-  buttons.forEach(button => {
-
-    const category = button.dataset.category;
-
-    selectedCategories.push(category);
-
-    button.classList.add("selected");
+    selectedCategories.add(category);
 
   });
 
-  updateSelectedInfo();
-
-  updateStartButton();
+  updateCategoryDisplay();
 
 }
 
 
-function clearAll() {
+function clearGroup(groupName) {
 
-  selectedCategories = [];
+  groups[groupName].forEach(category => {
 
-  const buttons =
-    document.querySelectorAll(".category-button");
-
-  buttons.forEach(button => {
-
-    button.classList.remove("selected");
+    selectedCategories.delete(category);
 
   });
 
-  updateSelectedInfo();
-
-  updateStartButton();
+  updateCategoryDisplay();
 
 }
 
 
-function updateSelectedInfo() {
-
-  const info =
-    document.getElementById("selectedInfo");
-
-  if (selectedCategories.length === 0) {
-
-    info.textContent =
-      "No categories selected.";
-
-    return;
-
-  }
-
-  info.textContent =
-    selectedCategories.length +
-    " categor" +
-    (selectedCategories.length === 1 ? "y" : "ies") +
-    " selected: " +
-    selectedCategories.join(", ");
-
-}
-
-
-function selectTimer(button) {
+function updateCategoryDisplay() {
 
   document
-    .querySelectorAll(".timer-option")
-    .forEach(item => {
-      item.classList.remove("selected");
+    .querySelectorAll(".category-button")
+    .forEach(button => {
+
+      const category =
+        button.dataset.category;
+
+      if (
+        selectedCategories.has(category)
+      ) {
+
+        button.classList.add("selected");
+
+      } else {
+
+        button.classList.remove("selected");
+
+      }
+
     });
-
-  button.classList.add("selected");
-
-  selectedTimerMinutes =
-    parseInt(button.dataset.time);
-
-  updateStartButton();
-
-}
-
-
-function updateStartButton() {
-
-  const button =
-    document.getElementById("startButton");
-
-  button.disabled =
-    selectedCategories.length === 0 ||
-    selectedTimerMinutes === 0;
 
 }
 
 
 /* =========================================================
-   CREATE WORD POOL
+   PRACTICE WORD
 ========================================================= */
 
-function createWordPool() {
+function showPracticeWord(select) {
 
-  wordPool = [];
+  if (!select.value) return;
+
+  const word =
+    select.value;
+
+  alert("Practice word: " + word);
+
+}
+
+
+/* =========================================================
+   TIMER SELECTION
+========================================================= */
+
+function selectTimer(minutes) {
+
+  selectedTime =
+    minutes;
+
+  document
+    .querySelectorAll(".timer-button")
+    .forEach(button => {
+
+      if (
+        Number(button.dataset.time) === minutes
+      ) {
+
+        button.classList.add("selected");
+
+      } else {
+
+        button.classList.remove("selected");
+
+      }
+
+    });
+
+}
+
+
+/* =========================================================
+   START ASSESSMENT
+========================================================= */
+
+function startAssessment() {
+
+  const message =
+    document.getElementById(
+      "selectionMessage"
+    );
+
+  if (selectedCategories.size === 0) {
+
+    message.style.display =
+      "block";
+
+    return;
+
+  }
+
+  message.style.display =
+    "none";
+
+
+  assessmentWords = [];
+
 
   selectedCategories.forEach(category => {
 
-    const words = wordDatabase[category] || [];
+    wordDatabase[category].forEach(word => {
 
-    words.forEach(word => {
+      assessmentWords.push({
 
-      wordPool.push({
         word: word,
-        pattern: category
+
+        category: category
+
       });
 
     });
 
   });
 
-  shuffleArray(wordPool);
+
+  shuffleArray(
+    assessmentWords
+  );
+
+
+  currentIndex = 0;
+
+  currentAttempts = 0;
+
+  totalAttempts = 0;
+
+  correctCount = 0;
+
+  skippedCount = 0;
+
+  results = [];
+
+
+  document
+    .getElementById("setupScreen")
+    .style.display = "none";
+
+  document
+    .getElementById("resultsScreen")
+    .style.display = "none";
+
+  document
+    .getElementById("assessmentScreen")
+    .style.display = "block";
+
+
+  assessmentStartTime =
+    Date.now();
+
+  timeRemaining =
+    selectedTime * 60;
+
+  updateTimerDisplay();
+
+  startTimer();
+
+  showCurrentWord();
 
 }
 
 
 /* =========================================================
-   SHUFFLE
+   SHOW CURRENT WORD
+========================================================= */
+
+function showCurrentWord() {
+
+  if (
+    currentIndex >= assessmentWords.length
+  ) {
+
+    finishAssessment();
+
+    return;
+
+  }
+
+
+  const item =
+    assessmentWords[currentIndex];
+
+
+  document.getElementById(
+    "currentWord"
+  ).textContent =
+    item.word;
+
+
+  document.getElementById(
+    "currentCategory"
+  ).textContent =
+    "Phonics: " +
+    categoryNames[item.category];
+
+
+  document.getElementById(
+    "progressText"
+  ).textContent =
+    "Word " +
+    (currentIndex + 1);
+
+
+  document.getElementById(
+    "categoryProgress"
+  ).textContent =
+    (currentIndex + 1) +
+    " / " +
+    assessmentWords.length;
+
+
+  const progress =
+    (
+      currentIndex /
+      assessmentWords.length
+    ) * 100;
+
+
+  document.getElementById(
+    "progressFill"
+  ).style.width =
+    progress + "%";
+
+
+  document.getElementById(
+    "attemptInfo"
+  ).textContent =
+    "Attempts: " +
+    currentAttempts;
+
+
+  document.getElementById(
+    "retryMessage"
+  ).textContent =
+    "";
+
+}
+
+
+/* =========================================================
+   CORRECT
+========================================================= */
+
+function markCorrect() {
+
+  currentAttempts++;
+
+  totalAttempts++;
+
+  correctCount++;
+
+
+  results.push({
+
+    number:
+      results.length + 1,
+
+    word:
+      assessmentWords[currentIndex].word,
+
+    category:
+      assessmentWords[currentIndex].category,
+
+    attempts:
+      currentAttempts,
+
+    result:
+      "Correct"
+
+  });
+
+
+  document.getElementById(
+    "retryMessage"
+  ).textContent =
+    "✓ Correct!";
+
+  document.getElementById(
+    "retryMessage"
+  ).className =
+    "retry-message correct";
+
+
+  setTimeout(() => {
+
+    currentIndex++;
+
+    currentAttempts = 0;
+
+    showCurrentWord();
+
+  }, 250);
+
+}
+
+
+/* =========================================================
+   INCORRECT
+========================================================= */
+
+function markIncorrect() {
+
+  currentAttempts++;
+
+  totalAttempts++;
+
+
+  document.getElementById(
+    "attemptInfo"
+  ).textContent =
+    "Attempts: " +
+    currentAttempts;
+
+
+  document.getElementById(
+    "retryMessage"
+  ).textContent =
+    "Try again.";
+
+  document.getElementById(
+    "retryMessage"
+  ).className =
+    "retry-message incorrect";
+
+}
+
+
+/* =========================================================
+   SKIP
+========================================================= */
+
+function skipWord() {
+
+  currentAttempts++;
+
+  totalAttempts++;
+
+  skippedCount++;
+
+
+  results.push({
+
+    number:
+      results.length + 1,
+
+    word:
+      assessmentWords[currentIndex].word,
+
+    category:
+      assessmentWords[currentIndex].category,
+
+    attempts:
+      currentAttempts,
+
+    result:
+      "Skipped"
+
+  });
+
+
+  currentIndex++;
+
+  currentAttempts = 0;
+
+  showCurrentWord();
+
+}
+
+
+/* =========================================================
+   TIMER
+========================================================= */
+
+function startTimer() {
+
+  clearInterval(timerInterval);
+
+
+  timerInterval =
+    setInterval(() => {
+
+      timeRemaining--;
+
+      updateTimerDisplay();
+
+
+      if (timeRemaining <= 0) {
+
+        clearInterval(timerInterval);
+
+        finishAssessment();
+
+      }
+
+    }, 1000);
+
+}
+
+
+function updateTimerDisplay() {
+
+  const minutes =
+    Math.floor(
+      timeRemaining / 60
+    );
+
+  const seconds =
+    timeRemaining % 60;
+
+
+  const display =
+    String(minutes).padStart(2,"0") +
+    ":" +
+    String(seconds).padStart(2,"0");
+
+
+  const timer =
+    document.getElementById(
+      "timerDisplay"
+    );
+
+
+  timer.textContent =
+    display;
+
+
+  timer.classList.remove(
+    "warning",
+    "danger"
+  );
+
+
+  if (timeRemaining <= 30) {
+
+    timer.classList.add(
+      "danger"
+    );
+
+  } else if (timeRemaining <= 60) {
+
+    timer.classList.add(
+      "warning"
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   FINISH
+========================================================= */
+
+function finishAssessment() {
+
+  clearInterval(timerInterval);
+
+
+  const elapsedSeconds =
+    Math.max(
+      1,
+      Math.floor(
+        (Date.now() -
+          assessmentStartTime) /
+        1000
+      )
+    );
+
+
+  const completed =
+    results.length;
+
+
+  const accuracy =
+    completed > 0
+      ? Math.round(
+          (
+            correctCount /
+            completed
+          ) * 100
+        )
+      : 0;
+
+
+  const minutes =
+    elapsedSeconds / 60;
+
+
+  const wpm =
+    Math.round(
+      correctCount /
+      minutes
+    );
+
+
+  document.getElementById(
+    "assessmentScreen"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "resultsScreen"
+  ).style.display =
+    "block";
+
+
+  document.getElementById(
+    "resultCorrect"
+  ).textContent =
+    correctCount;
+
+
+  document.getElementById(
+    "resultCompleted"
+  ).textContent =
+    completed;
+
+
+  document.getElementById(
+    "resultAccuracy"
+  ).textContent =
+    accuracy + "%";
+
+
+  document.getElementById(
+    "resultWPM"
+  ).textContent =
+    wpm;
+
+
+  document.getElementById(
+    "resultTime"
+  ).textContent =
+    formatTime(elapsedSeconds);
+
+
+  document.getElementById(
+    "resultAttempts"
+  ).textContent =
+    totalAttempts;
+
+
+  document.getElementById(
+    "resultSkipped"
+  ).textContent =
+    skippedCount;
+
+
+  document.getElementById(
+    "resultCategories"
+  ).textContent =
+    selectedCategories.size;
+
+
+  displayResultsTable();
+
+}
+
+
+/* =========================================================
+   RESULTS TABLE
+========================================================= */
+
+function displayResultsTable() {
+
+  const tbody =
+    document.getElementById(
+      "resultsTableBody"
+    );
+
+
+  tbody.innerHTML = "";
+
+
+  results.forEach(result => {
+
+    const row =
+      document.createElement("tr");
+
+
+    let statusClass =
+      "";
+
+
+    if (result.result === "Correct") {
+
+      statusClass =
+        "status-correct";
+
+    } else if (
+      result.result === "Skipped"
+    ) {
+
+      statusClass =
+        "status-skipped";
+
+    } else {
+
+      statusClass =
+        "status-incorrect";
+
+    }
+
+
+    row.innerHTML = `
+
+      <td>${result.number}</td>
+
+      <td>
+        <strong>${result.word}</strong>
+      </td>
+
+      <td>
+        ${categoryNames[result.category]}
+      </td>
+
+      <td>
+        ${result.attempts}
+      </td>
+
+      <td class="${statusClass}">
+        ${result.result}
+      </td>
+
+    `;
+
+
+    tbody.appendChild(row);
+
+  });
+
+}
+
+
+/* =========================================================
+   RESTART
+========================================================= */
+
+function restartAssessment() {
+
+  clearInterval(timerInterval);
+
+
+  document.getElementById(
+    "resultsScreen"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "assessmentScreen"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "setupScreen"
+  ).style.display =
+    "block";
+
+
+  updateCategoryDisplay();
+
+}
+
+
+/* =========================================================
+   HELPERS
 ========================================================= */
 
 function shuffleArray(array) {
@@ -1596,7 +2492,10 @@ function shuffleArray(array) {
   ) {
 
     const j =
-      Math.floor(Math.random() * (i + 1));
+      Math.floor(
+        Math.random() * (i + 1)
+      );
+
 
     [
       array[i],
@@ -1612,682 +2511,37 @@ function shuffleArray(array) {
 }
 
 
-/* =========================================================
-   START ASSESSMENT
-========================================================= */
-
-function startAssessment() {
-
-  if (
-    selectedCategories.length === 0 ||
-    selectedTimerMinutes === 0
-  ) {
-    return;
-  }
-
-  createWordPool();
-
-  currentWordIndex = 0;
-
-  currentWordData = null;
-
-  currentAttempts = 0;
-
-  correctWords = 0;
-
-  totalAttempts = 0;
-
-  skippedWords = 0;
-
-  assessmentResults = [];
-
-  totalAssessmentSeconds =
-    selectedTimerMinutes * 60;
-
-  timeRemaining =
-    totalAssessmentSeconds;
-
-  assessmentStartTime =
-    Date.now();
-
-  isPaused = false;
-
-  isAssessmentRunning = true;
-
-  document.getElementById("setupScreen").style.display =
-    "none";
-
-  document.getElementById("resultsScreen").style.display =
-    "none";
-
-  document.getElementById("assessmentScreen").style.display =
-    "block";
-
-  updateCorrectDisplay();
-
-  updateTimerDisplay();
-
-  loadNextWord();
-
-  startTimer();
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-
-}
-
-
-/* =========================================================
-   LOAD NEXT WORD
-========================================================= */
-
-function loadNextWord() {
-
-  if (!isAssessmentRunning) {
-    return;
-  }
-
-  /*
-   If we reach the end of the word pool,
-   shuffle it again so the assessment can
-   continue for the full selected time.
-  */
-
-  if (currentWordIndex >= wordPool.length) {
-
-    currentWordIndex = 0;
-
-    shuffleArray(wordPool);
-
-  }
-
-  currentWordData =
-    wordPool[currentWordIndex];
-
-  currentAttempts = 0;
-
-  displayCurrentWord();
-
-}
-
-
-/* =========================================================
-   DISPLAY CURRENT WORD
-========================================================= */
-
-function displayCurrentWord() {
-
-  if (!currentWordData) {
-    return;
-  }
-
-  document.getElementById("wordNumber").textContent =
-    "Word " + (assessmentResults.length + 1);
-
-  document.getElementById("wordCountDisplay").textContent =
-    assessmentResults.length + 1;
-
-  document.getElementById("patternLabel").textContent =
-    currentWordData.pattern;
-
-  document.getElementById("currentWord").textContent =
-    currentWordData.word;
-
-  updateAttemptInfo();
-
-}
-
-
-/* =========================================================
-   ATTEMPT INFORMATION
-========================================================= */
-
-function updateAttemptInfo() {
-
-  const info =
-    document.getElementById("attemptInfo");
-
-  if (currentAttempts === 0) {
-
-    info.textContent =
-      "First attempt";
-
-  } else if (currentAttempts === 1) {
-
-    info.textContent =
-      "1 incorrect attempt — try again";
-
-  } else {
-
-    info.textContent =
-      currentAttempts +
-      " incorrect attempts — try again";
-
-  }
-
-}
-
-
-/* =========================================================
-   MARK INCORRECT
-========================================================= */
-
-function markIncorrect() {
-
-  if (
-    !isAssessmentRunning ||
-    isPaused
-  ) {
-    return;
-  }
-
-  currentAttempts++;
-
-  totalAttempts++;
-
-  updateAttemptInfo();
-
-}
-
-
-/* =========================================================
-   MARK CORRECT
-========================================================= */
-
-function markCorrect() {
-
-  if (
-    !isAssessmentRunning ||
-    isPaused
-  ) {
-    return;
-  }
-
-  currentAttempts++;
-
-  totalAttempts++;
-
-  correctWords++;
-
-  assessmentResults.push({
-
-    word: currentWordData.word,
-
-    pattern: currentWordData.pattern,
-
-    attempts: currentAttempts,
-
-    result: "Correct"
-
-  });
-
-  currentWordIndex++;
-
-  updateCorrectDisplay();
-
-  loadNextWord();
-
-}
-
-
-/* =========================================================
-   SKIP WORD
-========================================================= */
-
-function skipWord() {
-
-  if (
-    !isAssessmentRunning ||
-    isPaused
-  ) {
-    return;
-  }
-
-  assessmentResults.push({
-
-    word: currentWordData.word,
-
-    pattern: currentWordData.pattern,
-
-    attempts: currentAttempts,
-
-    result: "Skipped"
-
-  });
-
-  skippedWords++;
-
-  currentWordIndex++;
-
-  loadNextWord();
-
-}
-
-
-/* =========================================================
-   CORRECT DISPLAY
-========================================================= */
-
-function updateCorrectDisplay() {
-
-  document.getElementById("correctDisplay").textContent =
-    correctWords;
-
-}
-
-
-/* =========================================================
-   TIMER
-========================================================= */
-
-function startTimer() {
-
-  clearInterval(timerInterval);
-
-  timerInterval = setInterval(function() {
-
-    if (
-      !isAssessmentRunning ||
-      isPaused
-    ) {
-      return;
-    }
-
-    timeRemaining--;
-
-    updateTimerDisplay();
-
-    updateProgressBar();
-
-    if (timeRemaining <= 0) {
-
-      clearInterval(timerInterval);
-
-      finishAssessment("time");
-
-    }
-
-  }, 1000);
-
-}
-
-
-function updateTimerDisplay() {
-
-  const display =
-    document.getElementById("timerDisplay");
+function formatTime(seconds) {
 
   const minutes =
-    Math.floor(timeRemaining / 60);
-
-  const seconds =
-    timeRemaining % 60;
-
-  display.textContent =
-    String(minutes).padStart(2, "0") +
-    ":" +
-    String(seconds).padStart(2, "0");
-
-  display.classList.remove(
-    "safe",
-    "warning"
-  );
-
-  if (timeRemaining <= 30) {
-
-    display.classList.add("warning");
-
-  } else {
-
-    display.classList.add("safe");
-
-  }
-
-}
-
-
-function updateProgressBar() {
-
-  const bar =
-    document.getElementById("progressBar");
-
-  const percentage =
-    (
-      timeRemaining /
-      totalAssessmentSeconds
-    ) * 100;
-
-  bar.style.width =
-    Math.max(0, percentage) + "%";
-
-}
-
-
-/* =========================================================
-   PAUSE
-========================================================= */
-
-function pauseAssessment() {
-
-  if (
-    !isAssessmentRunning ||
-    isPaused
-  ) {
-    return;
-  }
-
-  isPaused = true;
-
-  document.getElementById("pausedOverlay").style.display =
-    "flex";
-
-  document.getElementById("pauseButton").textContent =
-    "▶ Resume";
-
-  document.getElementById("pauseButton").onclick =
-    resumeAssessment;
-
-}
-
-
-function resumeAssessment() {
-
-  if (!isAssessmentRunning) {
-    return;
-  }
-
-  isPaused = false;
-
-  document.getElementById("pausedOverlay").style.display =
-    "none";
-
-  document.getElementById("pauseButton").textContent =
-    "⏸ Pause";
-
-  document.getElementById("pauseButton").onclick =
-    pauseAssessment;
-
-}
-
-
-/* =========================================================
-   END ASSESSMENT
-========================================================= */
-
-function endAssessment() {
-
-  if (!isAssessmentRunning) {
-    return;
-  }
-
-  const confirmed =
-    confirm(
-      "Are you sure you want to end the assessment?"
+    Math.floor(
+      seconds / 60
     );
 
-  if (!confirmed) {
-    return;
-  }
+  const remainingSeconds =
+    seconds % 60;
 
-  finishAssessment("manual");
-
-}
-
-
-/* =========================================================
-   FINISH ASSESSMENT
-========================================================= */
-
-function finishAssessment(reason) {
-
-  if (!isAssessmentRunning) {
-    return;
-  }
-
-  isAssessmentRunning = false;
-
-  isPaused = false;
-
-  clearInterval(timerInterval);
-
-  document.getElementById("pausedOverlay").style.display =
-    "none";
-
-  /*
-   Calculate the actual time used.
-  */
-
-  const timeUsed =
-    totalAssessmentSeconds -
-    timeRemaining;
-
-  showResults(timeUsed);
-
-}
-
-
-/* =========================================================
-   SHOW RESULTS
-========================================================= */
-
-function showResults(timeUsed) {
-
-  document.getElementById("assessmentScreen").style.display =
-    "none";
-
-  document.getElementById("resultsScreen").style.display =
-    "block";
-
-  /*
-   If the teacher ends the assessment immediately,
-   avoid division by zero.
-  */
-
-  const completedWords =
-    assessmentResults.length;
-
-  const accuracy =
-    completedWords > 0
-      ? (correctWords / completedWords) * 100
-      : 0;
-
-  const minutesUsed =
-    timeUsed > 0
-      ? timeUsed / 60
-      : 1 / 60;
-
-  const wordsPerMinute =
-    correctWords / minutesUsed;
-
-  document.getElementById("resultCorrect").textContent =
-    correctWords;
-
-  document.getElementById("resultTotal").textContent =
-    completedWords;
-
-  document.getElementById("resultAccuracy").textContent =
-    Math.round(accuracy) + "%";
-
-  document.getElementById("resultWPM").textContent =
-    wordsPerMinute.toFixed(1);
-
-  document.getElementById("resultTime").textContent =
-    formatTime(timeUsed);
-
-  document.getElementById("resultAttempts").textContent =
-    totalAttempts;
-
-  document.getElementById("resultSkipped").textContent =
-    skippedWords;
-
-  document.getElementById("resultCategories").textContent =
-    selectedCategories.length;
-
-  buildResultsTable();
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-
-}
-
-
-/* =========================================================
-   BUILD RESULTS TABLE
-========================================================= */
-
-function buildResultsTable() {
-
-  const tableBody =
-    document.getElementById("resultsTableBody");
-
-  tableBody.innerHTML = "";
-
-  assessmentResults.forEach(
-    function(result, index) {
-
-      const row =
-        document.createElement("tr");
-
-      const numberCell =
-        document.createElement("td");
-
-      numberCell.textContent =
-        index + 1;
-
-      const wordCell =
-        document.createElement("td");
-
-      wordCell.textContent =
-        result.word;
-
-      wordCell.style.fontWeight =
-        "bold";
-
-      const patternCell =
-        document.createElement("td");
-
-      patternCell.textContent =
-        result.pattern;
-
-      const attemptsCell =
-        document.createElement("td");
-
-      attemptsCell.textContent =
-        result.attempts;
-
-      const resultCell =
-        document.createElement("td");
-
-      resultCell.textContent =
-        result.result;
-
-      if (result.result === "Correct") {
-
-        resultCell.className =
-          "result-correct";
-
-      } else {
-
-        resultCell.className =
-          "result-skipped";
-
-      }
-
-      row.appendChild(numberCell);
-
-      row.appendChild(wordCell);
-
-      row.appendChild(patternCell);
-
-      row.appendChild(attemptsCell);
-
-      row.appendChild(resultCell);
-
-      tableBody.appendChild(row);
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   FORMAT TIME
-========================================================= */
-
-function formatTime(totalSeconds) {
-
-  const minutes =
-    Math.floor(totalSeconds / 60);
-
-  const seconds =
-    totalSeconds % 60;
 
   return (
     minutes +
     ":" +
-    String(seconds).padStart(2, "0")
+    String(
+      remainingSeconds
+    ).padStart(2,"0")
   );
 
 }
 
 
 /* =========================================================
-   RESTART
+   INITIALISE
 ========================================================= */
 
-function restartAssessment() {
+createDynamicCategories();
 
-  clearInterval(timerInterval);
+initializePracticeDropdowns();
 
-  isAssessmentRunning = false;
-
-  isPaused = false;
-
-  currentWordIndex = 0;
-
-  currentWordData = null;
-
-  currentAttempts = 0;
-
-  correctWords = 0;
-
-  totalAttempts = 0;
-
-  skippedWords = 0;
-
-  assessmentResults = [];
-
-  timeRemaining = 0;
-
-  document.getElementById("resultsScreen").style.display =
-    "none";
-
-  document.getElementById("assessmentScreen").style.display =
-    "none";
-
-  document.getElementById("setupScreen").style.display =
-    "block";
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-
-}
-
-
-/* =========================================================
-   INITIAL SETUP
-========================================================= */
-
-updateSelectedInfo();
-
-updateStartButton();
+selectTimer(5);
 
 </script>
 
