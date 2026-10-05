@@ -1,988 +1,976 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Reading Fluency Assessment</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phonics Reading Assessment</title>
 
-<style>
-  * {
-    box-sizing: border-box;
-  }
-
-  body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f4f7fb;
-    color: #243447;
-  }
-
-  .container {
-    max-width: 1100px;
-    margin: auto;
-    padding: 25px;
-  }
-
-  h1 {
-    text-align: center;
-    margin: 5px 0 8px;
-    font-size: 34px;
-  }
-
-  .subtitle {
-    text-align: center;
-    color: #65758b;
-    margin-bottom: 25px;
-    font-size: 16px;
-  }
-
-  .card {
-    background: white;
-    border-radius: 18px;
-    padding: 25px;
-    margin-bottom: 20px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.07);
-  }
-
-  .section-title {
-    font-size: 21px;
-    font-weight: bold;
-    margin-bottom: 15px;
-  }
-
-  .category-group {
-    margin-bottom: 22px;
-  }
-
-  .category-title {
-    font-size: 17px;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-
-  .category-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 9px;
-  }
-
-  .category-option {
-    position: relative;
-  }
-
-  .category-option input {
-    position: absolute;
-    opacity: 0;
-  }
-
-  .category-option label {
-    display: block;
-    padding: 10px 15px;
-    border: 2px solid #d9e1eb;
-    border-radius: 10px;
-    cursor: pointer;
-    background: #fff;
-    font-weight: bold;
-    transition: 0.2s;
-    user-select: none;
-  }
-
-  .category-option input:checked + label {
-    background: #e5f4ff;
-    border-color: #2696db;
-    color: #1376b6;
-  }
-
-  .timer-options {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-
-  .timer-option {
-    position: relative;
-  }
-
-  .timer-option input {
-    position: absolute;
-    opacity: 0;
-  }
-
-  .timer-option label {
-    display: block;
-    min-width: 75px;
-    text-align: center;
-    padding: 13px 18px;
-    border: 2px solid #d9e1eb;
-    border-radius: 12px;
-    cursor: pointer;
-    font-weight: bold;
-    background: white;
-  }
-
-  .timer-option input:checked + label {
-    background: #e9f9ef;
-    border-color: #35a85a;
-    color: #218441;
-  }
-
-  .button-row {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin-top: 20px;
-  }
-
-  button {
-    border: none;
-    border-radius: 12px;
-    padding: 13px 24px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.2s;
-  }
-
-  button:hover {
-    transform: translateY(-1px);
-  }
-
-  .start-btn {
-    background: #2696db;
-    color: white;
-    min-width: 180px;
-  }
-
-  .start-btn:hover {
-    background: #177dbd;
-  }
-
-  .secondary-btn {
-    background: #edf1f5;
-    color: #34495e;
-  }
-
-  .success-btn {
-    background: #35a85a;
-    color: white;
-  }
-
-  .danger-btn {
-    background: #e75b5b;
-    color: white;
-  }
-
-  .warning-btn {
-    background: #f0a832;
-    color: white;
-  }
-
-  .hidden {
-    display: none !important;
-  }
-
-  /* Assessment */
-
-  .assessment-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-  }
-
-  .timer-box {
-    font-size: 30px;
-    font-weight: bold;
-    padding: 10px 18px;
-    border-radius: 12px;
-    background: #edf5ff;
-    color: #2176b5;
-    min-width: 115px;
-    text-align: center;
-  }
-
-  .timer-box.warning {
-    background: #fff2df;
-    color: #d78313;
-  }
-
-  .timer-box.danger {
-    background: #ffe8e8;
-    color: #d63e3e;
-  }
-
-  .progress-info {
-    font-size: 16px;
-    color: #65758b;
-  }
-
-  .word-area {
-    text-align: center;
-    padding: 45px 20px 35px;
-    border-radius: 18px;
-    background: #f8fbff;
-    border: 2px solid #e4edf6;
-    min-height: 280px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .word {
-    font-size: 88px;
-    font-weight: bold;
-    letter-spacing: 2px;
-    color: #1f3448;
-    margin: 15px 0;
-  }
-
-  .phonics-pattern {
-    font-size: 16px;
-    color: #789;
-    margin-bottom: 15px;
-  }
-
-  .listening-status {
-    min-height: 28px;
-    font-size: 17px;
-    font-weight: bold;
-    margin-top: 12px;
-  }
-
-  .listening {
-    color: #2696db;
-  }
-
-  .correct {
-    color: #299650;
-  }
-
-  .incorrect {
-    color: #d84d4d;
-  }
-
-  .microphone {
-    width: 85px;
-    height: 85px;
-    border-radius: 50%;
-    border: none;
-    background: #2696db;
-    color: white;
-    font-size: 34px;
-    cursor: pointer;
-    margin-top: 5px;
-    box-shadow: 0 5px 15px rgba(38,150,219,0.25);
-  }
-
-  .microphone.listening {
-    animation: pulse 1s infinite;
-    background: #e24e4e;
-  }
-
-  @keyframes pulse {
-    0% {
-      transform: scale(1);
-      box-shadow: 0 0 0 0 rgba(226,78,78,0.45);
+  <style>
+    * {
+      box-sizing: border-box;
     }
 
-    70% {
-      transform: scale(1.05);
-      box-shadow: 0 0 0 20px rgba(226,78,78,0);
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4f7fb;
+      color: #263238;
     }
 
-    100% {
-      transform: scale(1);
-      box-shadow: 0 0 0 0 rgba(226,78,78,0);
-    }
-  }
-
-  .stats-row {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin-top: 20px;
-  }
-
-  .stat {
-    background: #f6f8fb;
-    border-radius: 12px;
-    padding: 12px 18px;
-    text-align: center;
-    min-width: 125px;
-  }
-
-  .stat-number {
-    font-size: 25px;
-    font-weight: bold;
-  }
-
-  .stat-label {
-    font-size: 13px;
-    color: #728197;
-    margin-top: 3px;
-  }
-
-  /* Results */
-
-  .results-header {
-    text-align: center;
-    margin-bottom: 25px;
-  }
-
-  .results-header h2 {
-    font-size: 30px;
-    margin-bottom: 8px;
-  }
-
-  .big-score {
-    font-size: 60px;
-    font-weight: bold;
-    color: #2696db;
-  }
-
-  .results-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-    gap: 15px;
-    margin-bottom: 25px;
-  }
-
-  .result-box {
-    background: #f7f9fc;
-    border-radius: 14px;
-    padding: 18px;
-    text-align: center;
-  }
-
-  .result-number {
-    font-size: 30px;
-    font-weight: bold;
-  }
-
-  .result-label {
-    color: #718096;
-    margin-top: 5px;
-  }
-
-  .results-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
-  }
-
-  .results-table th,
-  .results-table td {
-    padding: 11px;
-    border-bottom: 1px solid #e5eaf0;
-    text-align: left;
-  }
-
-  .results-table th {
-    background: #f4f7fa;
-  }
-
-  .status-correct {
-    color: #27934c;
-    font-weight: bold;
-  }
-
-  .status-retry {
-    color: #d35b45;
-    font-weight: bold;
-  }
-
-  .status-skipped {
-    color: #c38720;
-    font-weight: bold;
-  }
-
-  .info-box {
-    padding: 13px 16px;
-    border-radius: 10px;
-    background: #fff8df;
-    color: #745c19;
-    margin-top: 15px;
-    font-size: 14px;
-  }
-
-  .error-box {
-    padding: 13px 16px;
-    border-radius: 10px;
-    background: #ffecec;
-    color: #a53a3a;
-    margin-top: 15px;
-    font-size: 14px;
-  }
-
-  @media (max-width: 650px) {
     .container {
-      padding: 12px;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 25px;
     }
 
     h1 {
-      font-size: 27px;
+      text-align: center;
+      margin: 5px 0 8px;
+      color: #263238;
+      font-size: 34px;
     }
 
-    .word {
-      font-size: 62px;
+    .subtitle {
+      text-align: center;
+      color: #607d8b;
+      margin-bottom: 25px;
     }
 
-    .word-area {
-      min-height: 240px;
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 25px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    /* =========================
+       SETUP
+    ========================= */
+
+    .category-section {
+      margin-bottom: 25px;
+    }
+
+    .category-group {
+      border: 1px solid #dce3e8;
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 15px;
+      background: #fafcfe;
+    }
+
+    .category-group h3 {
+      margin: 0 0 12px;
+      font-size: 18px;
+    }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 10px;
+    }
+
+    .category-button {
+      border: 2px solid #d8e0e5;
+      background: white;
+      border-radius: 10px;
+      padding: 11px 8px;
+      cursor: pointer;
+      font-size: 15px;
+      transition: 0.15s;
+    }
+
+    .category-button:hover {
+      background: #f0f7ff;
+    }
+
+    .category-button.selected {
+      background: #e3f2fd;
+      border-color: #2196f3;
+      color: #1565c0;
+      font-weight: bold;
+    }
+
+    .selection-controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+
+    .small-button {
+      border: none;
+      border-radius: 8px;
+      padding: 9px 15px;
+      cursor: pointer;
+      background: #eceff1;
+      color: #37474f;
+      font-size: 14px;
+    }
+
+    .small-button:hover {
+      background: #cfd8dc;
+    }
+
+    .timer-options {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .timer-option {
+      flex: 1;
+      min-width: 90px;
+      border: 2px solid #d8e0e5;
+      background: white;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 18px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .timer-option.selected {
+      background: #e8f5e9;
+      border-color: #43a047;
+      color: #2e7d32;
+      font-weight: bold;
+    }
+
+    .start-button {
+      width: 100%;
+      border: none;
+      border-radius: 14px;
+      background: #2196f3;
+      color: white;
+      font-size: 22px;
+      font-weight: bold;
+      padding: 17px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .start-button:hover {
+      background: #1976d2;
+    }
+
+    .start-button:disabled {
+      background: #b0bec5;
+      cursor: not-allowed;
+    }
+
+    .selected-info {
+      background: #f1f8e9;
+      border-radius: 10px;
+      padding: 12px 15px;
+      margin-top: 12px;
+      color: #33691e;
+      font-size: 14px;
+    }
+
+    /* =========================
+       ASSESSMENT
+    ========================= */
+
+    #assessmentScreen,
+    #resultsScreen {
+      display: none;
     }
 
     .assessment-top {
-      justify-content: center;
-      text-align: center;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
     }
-  }
-</style>
+
+    .stat-box {
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+      border: 1px solid #e1e8ed;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: #78909c;
+      margin-bottom: 5px;
+    }
+
+    .stat-value {
+      font-size: 25px;
+      font-weight: bold;
+    }
+
+    .timer-display {
+      font-size: 32px;
+      color: #d32f2f;
+    }
+
+    .timer-display.warning {
+      color: #f57c00;
+    }
+
+    .timer-display.safe {
+      color: #388e3c;
+    }
+
+    .progress-container {
+      background: #e0e0e0;
+      height: 10px;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 15px 0 25px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 100%;
+      background: #43a047;
+      transition: width 1s linear;
+    }
+
+    .word-card {
+      text-align: center;
+      padding: 35px 20px 30px;
+      border: 2px solid #e3e8ec;
+      border-radius: 18px;
+      background: #ffffff;
+    }
+
+    .word-number {
+      font-size: 15px;
+      color: #78909c;
+      margin-bottom: 10px;
+    }
+
+    .pattern-label {
+      display: inline-block;
+      background: #e3f2fd;
+      color: #1565c0;
+      padding: 7px 15px;
+      border-radius: 20px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      font-size: 15px;
+    }
+
+    .current-word {
+      font-size: clamp(60px, 12vw, 120px);
+      font-weight: bold;
+      line-height: 1.1;
+      margin: 10px 0 25px;
+      color: #263238;
+      letter-spacing: 2px;
+    }
+
+    .attempt-info {
+      min-height: 28px;
+      color: #607d8b;
+      font-size: 16px;
+      margin-bottom: 18px;
+    }
+
+    .teacher-instruction {
+      background: #fff8e1;
+      color: #795548;
+      border-radius: 10px;
+      padding: 12px;
+      margin: 0 auto 20px;
+      max-width: 650px;
+      font-size: 15px;
+    }
+
+    .answer-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .answer-button {
+      border: none;
+      border-radius: 14px;
+      padding: 18px;
+      font-size: 21px;
+      font-weight: bold;
+      cursor: pointer;
+      color: white;
+    }
+
+    .correct-button {
+      background: #43a047;
+    }
+
+    .correct-button:hover {
+      background: #2e7d32;
+    }
+
+    .incorrect-button {
+      background: #e53935;
+    }
+
+    .incorrect-button:hover {
+      background: #c62828;
+    }
+
+    .skip-button {
+      background: #fb8c00;
+    }
+
+    .skip-button:hover {
+      background: #ef6c00;
+    }
+
+    .assessment-controls {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .control-button {
+      border: none;
+      border-radius: 10px;
+      padding: 11px 20px;
+      cursor: pointer;
+      font-size: 15px;
+      background: #eceff1;
+      color: #37474f;
+    }
+
+    .control-button:hover {
+      background: #cfd8dc;
+    }
+
+    .end-button {
+      background: #ffebee;
+      color: #c62828;
+    }
+
+    .end-button:hover {
+      background: #ffcdd2;
+    }
+
+    /* =========================
+       RESULTS
+    ========================= */
+
+    .result-summary {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+
+    .result-box {
+      background: #f8fafc;
+      border: 1px solid #e1e8ed;
+      border-radius: 12px;
+      text-align: center;
+      padding: 18px 10px;
+    }
+
+    .result-number {
+      font-size: 30px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .result-label {
+      font-size: 13px;
+      color: #607d8b;
+    }
+
+    .results-table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th,
+    td {
+      padding: 12px;
+      border-bottom: 1px solid #e5e9ec;
+      text-align: left;
+    }
+
+    th {
+      background: #f5f7f9;
+      font-weight: bold;
+    }
+
+    .result-correct {
+      color: #2e7d32;
+      font-weight: bold;
+    }
+
+    .result-skipped {
+      color: #ef6c00;
+      font-weight: bold;
+    }
+
+    .results-buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 25px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .restart-button {
+      background: #2196f3;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 13px 25px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .restart-button:hover {
+      background: #1976d2;
+    }
+
+    /* =========================
+       PAUSED
+    ========================= */
+
+    .paused-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .paused-box {
+      background: white;
+      border-radius: 18px;
+      padding: 35px;
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    .paused-box h2 {
+      margin-top: 0;
+    }
+
+    .resume-button {
+      border: none;
+      border-radius: 10px;
+      padding: 13px 25px;
+      background: #43a047;
+      color: white;
+      font-size: 17px;
+      cursor: pointer;
+    }
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media (max-width: 700px) {
+      .container {
+        padding: 15px;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+
+      .assessment-top {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .assessment-top .stat-box:last-child {
+        grid-column: span 2;
+      }
+
+      .result-summary {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .answer-buttons {
+        grid-template-columns: 1fr;
+      }
+
+      .current-word {
+        font-size: 65px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
 <div class="container">
 
-  <!-- SETUP SCREEN -->
+  <!-- =========================
+       SETUP SCREEN
+  ========================= -->
+
   <div id="setupScreen">
 
-    <h1>Reading Fluency Assessment</h1>
+    <h1>Phonics Reading Assessment</h1>
     <div class="subtitle">
-      Choose the phonics patterns and assessment time.
+      Select the phonics categories and assessment time.
     </div>
 
     <div class="card">
 
-      <div class="section-title">1. Choose Phonics Categories</div>
+      <div class="section-title">1. Select Phonics Categories</div>
 
-      <!-- SHORT A -->
-      <div class="category-group">
-        <div class="category-title">Short A</div>
-
-        <div class="category-grid">
-
-          <div class="category-option">
-            <input type="checkbox" id="ap" value="ap" data-pattern="ap">
-            <label for="ap">-ap</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="ad" value="ad" data-pattern="ad">
-            <label for="ad">-ad</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="an" value="an" data-pattern="an">
-            <label for="an">-an</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="at" value="at" data-pattern="at">
-            <label for="at">-at</label>
-          </div>
-
-        </div>
+      <div class="selection-controls">
+        <button class="small-button" onclick="selectAll()">Select All</button>
+        <button class="small-button" onclick="clearAll()">Clear All</button>
       </div>
 
-      <!-- SHORT E -->
-      <div class="category-group">
-        <div class="category-title">Short E</div>
+      <div class="category-section">
 
-        <div class="category-grid">
+        <!-- SHORT VOWELS -->
 
-          <div class="category-option">
-            <input type="checkbox" id="ed" value="ed">
-            <label for="ed">-ed</label>
+        <div class="category-group">
+          <h3>Short A</h3>
+          <div class="category-grid">
+            <button class="category-button" data-category="ap" onclick="toggleCategory(this)">-ap</button>
+            <button class="category-button" data-category="ad" onclick="toggleCategory(this)">-ad</button>
+            <button class="category-button" data-category="an" onclick="toggleCategory(this)">-an</button>
+            <button class="category-button" data-category="at" onclick="toggleCategory(this)">-at</button>
           </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="eg" value="eg">
-            <label for="eg">-eg</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="et" value="et">
-            <label for="et">-et</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="en" value="en">
-            <label for="en">-en</label>
-          </div>
-
         </div>
+
+        <div class="category-group">
+          <h3>Short E</h3>
+          <div class="category-grid">
+            <button class="category-button" data-category="ed" onclick="toggleCategory(this)">-ed</button>
+            <button class="category-button" data-category="eg" onclick="toggleCategory(this)">-eg</button>
+            <button class="category-button" data-category="et" onclick="toggleCategory(this)">-et</button>
+            <button class="category-button" data-category="en" onclick="toggleCategory(this)">-en</button>
+          </div>
+        </div>
+
+        <div class="category-group">
+          <h3>Short I</h3>
+          <div class="category-grid">
+            <button class="category-button" data-category="ig" onclick="toggleCategory(this)">-ig</button>
+            <button class="category-button" data-category="in" onclick="toggleCategory(this)">-in</button>
+            <button class="category-button" data-category="it" onclick="toggleCategory(this)">-it</button>
+            <button class="category-button" data-category="ip" onclick="toggleCategory(this)">-ip</button>
+          </div>
+        </div>
+
+        <div class="category-group">
+          <h3>Short O</h3>
+          <div class="category-grid">
+            <button class="category-button" data-category="og" onclick="toggleCategory(this)">-og</button>
+            <button class="category-button" data-category="op" onclick="toggleCategory(this)">-op</button>
+            <button class="category-button" data-category="ot" onclick="toggleCategory(this)">-ot</button>
+            <button class="category-button" data-category="ox" onclick="toggleCategory(this)">-ox</button>
+          </div>
+        </div>
+
+        <div class="category-group">
+          <h3>Short U</h3>
+          <div class="category-grid">
+            <button class="category-button" data-category="ug" onclick="toggleCategory(this)">-ug</button>
+            <button class="category-button" data-category="un" onclick="toggleCategory(this)">-un</button>
+            <button class="category-button" data-category="ut" onclick="toggleCategory(this)">-ut</button>
+            <button class="category-button" data-category="ub" onclick="toggleCategory(this)">-ub</button>
+          </div>
+        </div>
+
+        <!-- BLENDS -->
+
+        <div class="category-group">
+          <h3>Beginning Consonant Blends</h3>
+          <div class="category-grid">
+            <button class="category-button" data-category="bl" onclick="toggleCategory(this)">bl</button>
+            <button class="category-button" data-category="cl" onclick="toggleCategory(this)">cl</button>
+            <button class="category-button" data-category="fl" onclick="toggleCategory(this)">fl</button>
+            <button class="category-button" data-category="gl" onclick="toggleCategory(this)">gl</button>
+            <button class="category-button" data-category="pl" onclick="toggleCategory(this)">pl</button>
+            <button class="category-button" data-category="sl" onclick="toggleCategory(this)">sl</button>
+
+            <button class="category-button" data-category="sc" onclick="toggleCategory(this)">sc</button>
+            <button class="category-button" data-category="sk" onclick="toggleCategory(this)">sk</button>
+            <button class="category-button" data-category="sm" onclick="toggleCategory(this)">sm</button>
+            <button class="category-button" data-category="sn" onclick="toggleCategory(this)">sn</button>
+            <button class="category-button" data-category="sp" onclick="toggleCategory(this)">sp</button>
+            <button class="category-button" data-category="st" onclick="toggleCategory(this)">st</button>
+
+            <button class="category-button" data-category="br" onclick="toggleCategory(this)">br</button>
+            <button class="category-button" data-category="cr" onclick="toggleCategory(this)">cr</button>
+            <button class="category-button" data-category="dr" onclick="toggleCategory(this)">dr</button>
+            <button class="category-button" data-category="fr" onclick="toggleCategory(this)">fr</button>
+            <button class="category-button" data-category="gr" onclick="toggleCategory(this)">gr</button>
+            <button class="category-button" data-category="pr" onclick="toggleCategory(this)">pr</button>
+            <button class="category-button" data-category="tr" onclick="toggleCategory(this)">tr</button>
+          </div>
+        </div>
+
+        <!-- DIGRAPHS -->
+
+        <div class="category-group">
+          <h3>Digraphs</h3>
+          <div class="category-grid">
+            <button class="category-button" data-category="ch" onclick="toggleCategory(this)">ch</button>
+            <button class="category-button" data-category="ck" onclick="toggleCategory(this)">ck</button>
+            <button class="category-button" data-category="ng" onclick="toggleCategory(this)">ng</button>
+            <button class="category-button" data-category="ph" onclick="toggleCategory(this)">ph</button>
+            <button class="category-button" data-category="qu" onclick="toggleCategory(this)">qu</button>
+            <button class="category-button" data-category="sh" onclick="toggleCategory(this)">sh</button>
+            <button class="category-button" data-category="th" onclick="toggleCategory(this)">th</button>
+            <button class="category-button" data-category="wh" onclick="toggleCategory(this)">wh</button>
+          </div>
+        </div>
+
       </div>
 
-      <!-- SHORT I -->
-      <div class="category-group">
-        <div class="category-title">Short I</div>
-
-        <div class="category-grid">
-
-          <div class="category-option">
-            <input type="checkbox" id="ig" value="ig">
-            <label for="ig">-ig</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="in" value="in">
-            <label for="in">-in</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="it" value="it">
-            <label for="it">-it</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="ip" value="ip">
-            <label for="ip">-ip</label>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- SHORT O -->
-      <div class="category-group">
-        <div class="category-title">Short O</div>
-
-        <div class="category-grid">
-
-          <div class="category-option">
-            <input type="checkbox" id="og" value="og">
-            <label for="og">-og</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="op" value="op">
-            <label for="op">-op</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="ot" value="ot">
-            <label for="ot">-ot</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="ox" value="ox">
-            <label for="ox">-ox</label>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- SHORT U -->
-      <div class="category-group">
-        <div class="category-title">Short U</div>
-
-        <div class="category-grid">
-
-          <div class="category-option">
-            <input type="checkbox" id="ug" value="ug">
-            <label for="ug">-ug</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="un" value="un">
-            <label for="un">-un</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="ut" value="ut">
-            <label for="ut">-ut</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="ub" value="ub">
-            <label for="ub">-ub</label>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- BLENDS -->
-      <div class="category-group">
-        <div class="category-title">Consonant Blends</div>
-
-        <div class="category-grid">
-
-          <div class="category-option">
-            <input type="checkbox" id="bl" value="bl">
-            <label for="bl">bl</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="cl" value="cl">
-            <label for="cl">cl</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="fl" value="fl">
-            <label for="fl">fl</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="gl" value="gl">
-            <label for="gl">gl</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="pl" value="pl">
-            <label for="pl">pl</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="sl" value="sl">
-            <label for="sl">sl</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="sc" value="sc">
-            <label for="sc">sc</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="sk" value="sk">
-            <label for="sk">sk</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="sm" value="sm">
-            <label for="sm">sm</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="sn" value="sn">
-            <label for="sn">sn</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="sp" value="sp">
-            <label for="sp">sp</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="st" value="st">
-            <label for="st">st</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="br" value="br">
-            <label for="br">br</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="cr" value="cr">
-            <label for="cr">cr</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="dr" value="dr">
-            <label for="dr">dr</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="fr" value="fr">
-            <label for="fr">fr</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="gr" value="gr">
-            <label for="gr">gr</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="pr" value="pr">
-            <label for="pr">pr</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="tr" value="tr">
-            <label for="tr">tr</label>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- DIGRAPHS -->
-      <div class="category-group">
-        <div class="category-title">Digraphs</div>
-
-        <div class="category-grid">
-
-          <div class="category-option">
-            <input type="checkbox" id="ch" value="ch">
-            <label for="ch">ch</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="ck" value="ck">
-            <label for="ck">ck</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="ng" value="ng">
-            <label for="ng">ng</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="ph" value="ph">
-            <label for="ph">ph</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="qu" value="qu">
-            <label for="qu">qu</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="sh" value="sh">
-            <label for="sh">sh</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="th" value="th">
-            <label for="th">th</label>
-          </div>
-
-          <div class="category-option">
-            <input type="checkbox" id="wh" value="wh">
-            <label for="wh">wh</label>
-          </div>
-
-        </div>
+      <div id="selectedInfo" class="selected-info">
+        No categories selected.
       </div>
 
     </div>
-
 
     <!-- TIMER -->
+
     <div class="card">
 
-      <div class="section-title">
-        2. Choose Assessment Time
-      </div>
+      <div class="section-title">2. Choose Assessment Time</div>
 
       <div class="timer-options">
 
-        <div class="timer-option">
-          <input type="radio" name="timer" id="timer1" value="1">
-          <label for="timer1">1 min</label>
-        </div>
-
-        <div class="timer-option">
-          <input type="radio" name="timer" id="timer2" value="2">
-          <label for="timer2">2 min</label>
-        </div>
-
-        <div class="timer-option">
-          <input type="radio" name="timer" id="timer3" value="3" checked>
-          <label for="timer3">3 min</label>
-        </div>
-
-        <div class="timer-option">
-          <input type="radio" name="timer" id="timer4" value="4">
-          <label for="timer4">4 min</label>
-        </div>
-
-        <div class="timer-option">
-          <input type="radio" name="timer" id="timer5" value="5">
-          <label for="timer5">5 min</label>
-        </div>
-
-      </div>
-
-      <div class="button-row">
-        <button class="start-btn" onclick="startAssessment()">
-          Start Assessment
+        <button class="timer-option" data-time="1" onclick="selectTimer(this)">
+          1 Minute
         </button>
+
+        <button class="timer-option" data-time="2" onclick="selectTimer(this)">
+          2 Minutes
+        </button>
+
+        <button class="timer-option" data-time="3" onclick="selectTimer(this)">
+          3 Minutes
+        </button>
+
+        <button class="timer-option" data-time="4" onclick="selectTimer(this)">
+          4 Minutes
+        </button>
+
+        <button class="timer-option" data-time="5" onclick="selectTimer(this)">
+          5 Minutes
+        </button>
+
       </div>
 
-      <div id="setupMessage"></div>
+    </div>
+
+    <div class="card">
+
+      <button
+        id="startButton"
+        class="start-button"
+        onclick="startAssessment()"
+        disabled
+      >
+        Start Assessment
+      </button>
 
     </div>
 
   </div>
 
 
-  <!-- ASSESSMENT SCREEN -->
-  <div id="assessmentScreen" class="hidden">
+  <!-- =========================
+       ASSESSMENT SCREEN
+  ========================= -->
+
+  <div id="assessmentScreen">
+
+    <h1>Reading Assessment</h1>
+
+    <div class="assessment-top">
+
+      <div class="stat-box">
+        <div class="stat-label">Time Remaining</div>
+        <div id="timerDisplay" class="stat-value timer-display">
+          01:00
+        </div>
+      </div>
+
+      <div class="stat-box">
+        <div class="stat-label">Words Correct</div>
+        <div id="correctDisplay" class="stat-value">
+          0
+        </div>
+      </div>
+
+      <div class="stat-box">
+        <div class="stat-label">Current Word</div>
+        <div id="wordCountDisplay" class="stat-value">
+          1
+        </div>
+      </div>
+
+    </div>
+
+    <div class="progress-container">
+      <div id="progressBar" class="progress-bar"></div>
+    </div>
 
     <div class="card">
 
-      <div class="assessment-top">
+      <div class="word-card">
 
-        <div class="progress-info">
-          Word <span id="wordNumber">1</span>
+        <div id="wordNumber" class="word-number">
+          Word 1
         </div>
 
-        <div id="timerDisplay" class="timer-box">
-          3:00
+        <div id="patternLabel" class="pattern-label">
+          -ap
         </div>
 
-        <div class="progress-info">
-          Correct: <strong id="correctCount">0</strong>
-        </div>
-
-      </div>
-
-
-      <div class="word-area">
-
-        <div id="patternDisplay" class="phonics-pattern">
-          Short A
-        </div>
-
-        <div id="wordDisplay" class="word">
+        <div id="currentWord" class="current-word">
           cat
         </div>
 
-        <button id="microphoneButton"
-                class="microphone"
-                onclick="startListening()">
-          🎤
-        </button>
+        <div id="attemptInfo" class="attempt-info">
+          First attempt
+        </div>
 
-        <div id="listeningStatus" class="listening-status">
-          Tap the microphone and read the word.
+        <div class="teacher-instruction">
+          Ask the student to read the word aloud.
+          Then select <strong>Correct</strong> if they read it correctly.
+          Select <strong>Incorrect</strong> if they need to try again.
+        </div>
+
+        <div class="answer-buttons">
+
+          <button
+            class="answer-button correct-button"
+            onclick="markCorrect()"
+          >
+            ✓ Correct
+          </button>
+
+          <button
+            class="answer-button incorrect-button"
+            onclick="markIncorrect()"
+          >
+            ✗ Incorrect
+          </button>
+
+          <button
+            class="answer-button skip-button"
+            onclick="skipWord()"
+          >
+            → Skip Word
+          </button>
+
         </div>
 
       </div>
 
+      <div class="assessment-controls">
 
-      <div class="stats-row">
-
-        <div class="stat">
-          <div id="attemptCount" class="stat-number">0</div>
-          <div class="stat-label">Attempts</div>
-        </div>
-
-        <div class="stat">
-          <div id="retryCount" class="stat-number">0</div>
-          <div class="stat-label">Retries</div>
-        </div>
-
-        <div class="stat">
-          <div id="elapsedWords" class="stat-number">0</div>
-          <div class="stat-label">Words Correct</div>
-        </div>
-
-      </div>
-
-
-      <div class="button-row">
-
-        <button class="warning-btn" onclick="skipWord()">
-          Skip Word
+        <button
+          id="pauseButton"
+          class="control-button"
+          onclick="pauseAssessment()"
+        >
+          ⏸ Pause
         </button>
 
-        <button class="secondary-btn" onclick="pauseAssessment()">
-          Pause
-        </button>
-
-        <button class="danger-btn" onclick="endAssessment()">
+        <button
+          class="control-button end-button"
+          onclick="endAssessment()"
+        >
           End Assessment
         </button>
 
       </div>
 
-      <div id="browserWarning" class="info-box hidden">
-        Microphone speech recognition works best in Google Chrome or Microsoft Edge.
-        Please allow microphone access when your browser asks.
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       RESULTS SCREEN
+  ========================= -->
+
+  <div id="resultsScreen">
+
+    <h1>Assessment Results</h1>
+
+    <div class="subtitle">
+      Reading assessment summary
+    </div>
+
+    <div class="card">
+
+      <div class="result-summary">
+
+        <div class="result-box">
+          <div id="resultCorrect" class="result-number">
+            0
+          </div>
+          <div class="result-label">
+            Words Correct
+          </div>
+        </div>
+
+        <div class="result-box">
+          <div id="resultTotal" class="result-number">
+            0
+          </div>
+          <div class="result-label">
+            Words Completed
+          </div>
+        </div>
+
+        <div class="result-box">
+          <div id="resultAccuracy" class="result-number">
+            0%
+          </div>
+          <div class="result-label">
+            Accuracy
+          </div>
+        </div>
+
+        <div class="result-box">
+          <div id="resultWPM" class="result-number">
+            0
+          </div>
+          <div class="result-label">
+            Words Correct / Minute
+          </div>
+        </div>
+
+      </div>
+
+      <div class="result-summary">
+
+        <div class="result-box">
+          <div id="resultTime" class="result-number">
+            0:00
+          </div>
+          <div class="result-label">
+            Time Used
+          </div>
+        </div>
+
+        <div class="result-box">
+          <div id="resultAttempts" class="result-number">
+            0
+          </div>
+          <div class="result-label">
+            Total Attempts
+          </div>
+        </div>
+
+        <div class="result-box">
+          <div id="resultSkipped" class="result-number">
+            0
+          </div>
+          <div class="result-label">
+            Words Skipped
+          </div>
+        </div>
+
+        <div class="result-box">
+          <div id="resultCategories" class="result-number">
+            0
+          </div>
+          <div class="result-label">
+            Categories
+          </div>
+        </div>
+
+      </div>
+
+      <div class="section-title">
+        Detailed Results
+      </div>
+
+      <div class="results-table-wrapper">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Word</th>
+              <th>Pattern</th>
+              <th>Attempts</th>
+              <th>Result</th>
+            </tr>
+          </thead>
+
+          <tbody id="resultsTableBody">
+          </tbody>
+
+        </table>
+
+      </div>
+
+      <div class="results-buttons">
+
+        <button
+          class="restart-button"
+          onclick="restartAssessment()"
+        >
+          Start New Assessment
+        </button>
+
       </div>
 
     </div>
 
   </div>
 
-
-  <!-- RESULTS SCREEN -->
-  <div id="resultsScreen" class="hidden">
-
-    <div class="card">
-
-      <div class="results-header">
-
-        <h2>Reading Assessment Complete</h2>
-
-        <div id="bigScore" class="big-score">
-          0%
-        </div>
-
-        <div>Reading Accuracy</div>
-
-      </div>
+</div>
 
 
-      <div class="results-grid">
+<!-- =========================
+     PAUSED OVERLAY
+========================= -->
 
-        <div class="result-box">
-          <div id="resultCorrect" class="result-number">0</div>
-          <div class="result-label">Correct</div>
-        </div>
+<div id="pausedOverlay" class="paused-overlay">
 
-        <div class="result-box">
-          <div id="resultAttempts" class="result-number">0</div>
-          <div class="result-label">Total Attempts</div>
-        </div>
+  <div class="paused-box">
 
-        <div class="result-box">
-          <div id="resultRetries" class="result-number">0</div>
-          <div class="result-label">Retries</div>
-        </div>
+    <h2>Assessment Paused</h2>
 
-        <div class="result-box">
-          <div id="resultSkipped" class="result-number">0</div>
-          <div class="result-label">Skipped</div>
-        </div>
+    <p>
+      The timer is paused. Resume when you are ready.
+    </p>
 
-        <div class="result-box">
-          <div id="resultWPM" class="result-number">0</div>
-          <div class="result-label">Words / Minute</div>
-        </div>
-
-        <div class="result-box">
-          <div id="resultTime" class="result-number">0:00</div>
-          <div class="result-label">Time Used</div>
-        </div>
-
-      </div>
-
-
-      <div class="section-title">
-        Word Results
-      </div>
-
-      <table class="results-table">
-
-        <thead>
-          <tr>
-            <th>Word</th>
-            <th>Pattern</th>
-            <th>Attempts</th>
-            <th>Result</th>
-          </tr>
-        </thead>
-
-        <tbody id="resultsTableBody"></tbody>
-
-      </table>
-
-
-      <div class="button-row">
-
-        <button class="start-btn" onclick="returnToSetup()">
-          New Assessment
-        </button>
-
-      </div>
-
-    </div>
+    <button
+      class="resume-button"
+      onclick="resumeAssessment()"
+    >
+      ▶ Resume
+    </button>
 
   </div>
 
@@ -995,209 +983,408 @@
    WORD DATABASE
 ========================================================= */
 
-const WORD_DATABASE = {
+const wordDatabase = {
 
   /* SHORT A */
+
   ap: [
-    "cap","gap","lap","map","nap","rap","sap","tap"
+    "cap",
+    "gap",
+    "lap",
+    "map",
+    "nap",
+    "rap",
+    "sap",
+    "tap"
   ],
 
   ad: [
-    "bad","dad","had","lad","mad","pad","sad"
+    "bad",
+    "dad",
+    "had",
+    "lad",
+    "mad",
+    "pad",
+    "sad"
   ],
 
   an: [
-    "can","fan","man","pan","ran","tan","van"
+    "can",
+    "fan",
+    "man",
+    "pan",
+    "ran",
+    "tan",
+    "van"
   ],
 
   at: [
-    "bat","cat","fat","hat","mat","pat","rat","sat"
+    "bat",
+    "cat",
+    "fat",
+    "hat",
+    "mat",
+    "pat",
+    "rat",
+    "sat"
   ],
 
 
   /* SHORT E */
+
   ed: [
-    "bed","fed","led","red"
+    "bed",
+    "fed",
+    "led",
+    "red"
   ],
 
   eg: [
-    "beg","leg","peg"
+    "beg",
+    "leg",
+    "peg"
   ],
 
   et: [
-    "bet","get","jet","let","met","net","pet","set","wet"
+    "bet",
+    "get",
+    "jet",
+    "let",
+    "met",
+    "net",
+    "pet",
+    "set",
+    "wet"
   ],
 
   en: [
-    "den","hen","men","pen","ten"
+    "den",
+    "hen",
+    "men",
+    "pen",
+    "ten"
   ],
 
 
   /* SHORT I */
+
   ig: [
-    "big","dig","fig","pig","rig","wig"
+    "big",
+    "dig",
+    "fig",
+    "pig",
+    "rig",
+    "wig"
   ],
 
   in: [
-    "bin","fin","kin","pin","sin","tin","win"
+    "bin",
+    "fin",
+    "kin",
+    "pin",
+    "sin",
+    "tin",
+    "win"
   ],
 
   it: [
-    "bit","fit","hit","kit","lit","pit","sit"
+    "bit",
+    "fit",
+    "hit",
+    "kit",
+    "lit",
+    "pit",
+    "sit"
   ],
 
   ip: [
-    "dip","hip","lip","nip","rip","sip","tip","zip"
+    "dip",
+    "hip",
+    "lip",
+    "nip",
+    "rip",
+    "sip",
+    "tip",
+    "zip"
   ],
 
 
   /* SHORT O */
+
   og: [
-    "dog","fog","hog","jog","log"
+    "dog",
+    "fog",
+    "hog",
+    "jog",
+    "log"
   ],
 
   op: [
-    "cop","hop","mop","pop","top"
+    "cop",
+    "hop",
+    "mop",
+    "pop",
+    "top"
   ],
 
   ot: [
-    "cot","dot","got","hot","lot","pot","rot"
+    "cot",
+    "dot",
+    "got",
+    "hot",
+    "lot",
+    "pot",
+    "rot"
   ],
 
   ox: [
-    "box","fox"
+    "box",
+    "fox"
   ],
 
 
   /* SHORT U */
+
   ug: [
-    "bug","dug","hug","jug","mug","rug"
+    "bug",
+    "dug",
+    "hug",
+    "jug",
+    "mug",
+    "rug"
   ],
 
   un: [
-    "bun","fun","gun","run","sun"
+    "bun",
+    "fun",
+    "gun",
+    "run",
+    "sun"
   ],
 
   ut: [
-    "but","cut","gut","hut","nut"
+    "but",
+    "cut",
+    "gut",
+    "hut",
+    "nut"
   ],
 
   ub: [
-    "cub","rub","tub"
+    "cub",
+    "rub",
+    "tub"
   ],
 
 
   /* BLENDS */
 
   bl: [
-    "black","blow","blue","block","blank"
+    "black",
+    "blow",
+    "blue",
+    "block",
+    "blank"
   ],
 
   cl: [
-    "clap","clip","club","clam","class"
+    "clap",
+    "clip",
+    "club",
+    "clam",
+    "class"
   ],
 
   fl: [
-    "flag","flat","flip","flop","fly"
+    "flag",
+    "flat",
+    "flip",
+    "flop",
+    "fly"
   ],
 
   gl: [
-    "glad","glass","globe","glum"
+    "glad",
+    "glass",
+    "globe",
+    "glum"
   ],
 
   pl: [
-    "plan","play","plug","plum"
+    "plan",
+    "play",
+    "plug",
+    "plum"
   ],
 
   sl: [
-    "slam","slap","slip","slim","slug"
+    "slam",
+    "slap",
+    "slip",
+    "slim",
+    "slug"
   ],
 
   sc: [
-    "scan","scab","scat","scam"
+    "scan",
+    "scab",
+    "scat",
+    "scam"
   ],
 
   sk: [
-    "skip","skin","skit","skate"
+    "skip",
+    "skin",
+    "skit",
+    "skate"
   ],
 
   sm: [
-    "smash","smell","smile","smog"
+    "smash",
+    "smell",
+    "smile",
+    "smog"
   ],
 
   sn: [
-    "snap","snip","snug","snow"
+    "snap",
+    "snip",
+    "snug",
+    "snow"
   ],
 
   sp: [
-    "spin","spot","spit","spill","spell"
+    "spin",
+    "spot",
+    "spit",
+    "spill",
+    "spell"
   ],
 
   st: [
-    "stand","stop","step","stick","stamp"
+    "stand",
+    "stop",
+    "step",
+    "stick",
+    "stamp"
   ],
 
   br: [
-    "brag","brat","brick","bring","brush"
+    "brag",
+    "brat",
+    "brick",
+    "bring",
+    "brush"
   ],
 
   cr: [
-    "crab","crack","crop","crib","crush"
+    "crab",
+    "crack",
+    "crop",
+    "crib",
+    "crush"
   ],
 
   dr: [
-    "drag","drop","drip","drum","dress"
+    "drag",
+    "drop",
+    "drip",
+    "drum",
+    "dress"
   ],
 
   fr: [
-    "frog","from","fresh","frill"
+    "frog",
+    "from",
+    "fresh",
+    "frill"
   ],
 
   gr: [
-    "grab","grass","grip","grin","grow"
+    "grab",
+    "grass",
+    "grip",
+    "grin",
+    "grow"
   ],
 
   pr: [
-    "plan","press","print","prize"
+    "press",
+    "print",
+    "prize",
+    "pram",
+    "prep"
   ],
 
   tr: [
-    "trap","trip","tree","truck","train"
+    "trap",
+    "trip",
+    "tree",
+    "truck",
+    "train"
   ],
 
 
   /* DIGRAPHS */
 
   ch: [
-    "chat","chin","chip","chop","chest"
+    "chat",
+    "chin",
+    "chip",
+    "chop",
+    "chest"
   ],
 
   ck: [
-    "back","duck","kick","pack","sock"
+    "back",
+    "duck",
+    "kick",
+    "pack",
+    "sock"
   ],
 
   ng: [
-    "bang","king","ring","sing","song"
+    "bang",
+    "king",
+    "ring",
+    "sing",
+    "song"
   ],
 
   ph: [
-    "phone","photo","graph"
+    "phone",
+    "photo",
+    "graph"
   ],
 
   qu: [
-    "quit","quiz","quick","queen"
+    "quit",
+    "quiz",
+    "quick",
+    "queen"
   ],
 
   sh: [
-    "ship","shop","shut","fish","brush"
+    "ship",
+    "shop",
+    "shut",
+    "fish",
+    "brush"
   ],
 
   th: [
-    "that","this","thin","thick","bath"
+    "that",
+    "this",
+    "thin",
+    "thick",
+    "bath"
   ],
 
   wh: [
-    "when","whip","whale","wheel"
+    "when",
+    "whip",
+    "whale",
+    "wheel"
   ]
 
 };
@@ -1207,116 +1394,220 @@ const WORD_DATABASE = {
    VARIABLES
 ========================================================= */
 
-let selectedPatterns = [];
+let selectedCategories = [];
+
+let selectedTimerMinutes = 0;
+
 let wordPool = [];
+
 let currentWordIndex = 0;
 
-let currentWord = "";
-let currentPattern = "";
-
-let timerSeconds = 180;
-let remainingSeconds = 180;
-let timerInterval = null;
-
-let assessmentStarted = false;
-let paused = false;
-
-let totalAttempts = 0;
-let correctWords = 0;
-let retryCount = 0;
-let skippedCount = 0;
+let currentWordData = null;
 
 let currentAttempts = 0;
 
-let wordResults = [];
+let correctWords = 0;
 
-let recognition = null;
-let isListening = false;
+let totalAttempts = 0;
+
+let skippedWords = 0;
+
+let assessmentResults = [];
+
+let timerInterval = null;
+
+let timeRemaining = 0;
+
+let totalAssessmentSeconds = 0;
 
 let assessmentStartTime = null;
 
+let isPaused = false;
+
+let isAssessmentRunning = false;
+
 
 /* =========================================================
-   SPEECH RECOGNITION
+   CATEGORY SELECTION
 ========================================================= */
 
-const SpeechRecognition =
-  window.SpeechRecognition ||
-  window.webkitSpeechRecognition;
+function toggleCategory(button) {
 
-if (SpeechRecognition) {
+  const category = button.dataset.category;
 
-  recognition = new SpeechRecognition();
+  if (selectedCategories.includes(category)) {
 
-  recognition.continuous = false;
-  recognition.interimResults = false;
-  recognition.lang = "en-US";
+    selectedCategories =
+      selectedCategories.filter(item => item !== category);
 
-  recognition.onstart = function() {
+    button.classList.remove("selected");
 
-    isListening = true;
+  } else {
 
-    document
-      .getElementById("microphoneButton")
-      .classList.add("listening");
+    selectedCategories.push(category);
 
-    document.getElementById("listeningStatus").innerHTML =
-      "Listening... Please read the word.";
+    button.classList.add("selected");
 
-    document.getElementById("listeningStatus").className =
-      "listening-status listening";
-  };
+  }
+
+  updateSelectedInfo();
+
+  updateStartButton();
+
+}
 
 
-  recognition.onresult = function(event) {
+function selectAll() {
 
-    isListening = false;
+  const buttons =
+    document.querySelectorAll(".category-button");
 
-    const transcript =
-      event.results[0][0].transcript
-      .toLowerCase()
-      .trim();
+  selectedCategories = [];
 
-    evaluateSpeech(transcript);
-  };
+  buttons.forEach(button => {
 
+    const category = button.dataset.category;
 
-  recognition.onerror = function(event) {
+    selectedCategories.push(category);
 
-    isListening = false;
+    button.classList.add("selected");
 
-    document
-      .getElementById("microphoneButton")
-      .classList.remove("listening");
+  });
 
-    if (event.error === "not-allowed") {
+  updateSelectedInfo();
 
-      document.getElementById("listeningStatus").innerHTML =
-        "Microphone permission was denied.";
+  updateStartButton();
 
-      document.getElementById("listeningStatus").className =
-        "listening-status incorrect";
-
-    } else {
-
-      document.getElementById("listeningStatus").innerHTML =
-        "I couldn't hear that. Please try again.";
-
-      document.getElementById("listeningStatus").className =
-        "listening-status incorrect";
-    }
-
-  };
+}
 
 
-  recognition.onend = function() {
+function clearAll() {
 
-    isListening = false;
+  selectedCategories = [];
 
-    document
-      .getElementById("microphoneButton")
-      .classList.remove("listening");
-  };
+  const buttons =
+    document.querySelectorAll(".category-button");
+
+  buttons.forEach(button => {
+
+    button.classList.remove("selected");
+
+  });
+
+  updateSelectedInfo();
+
+  updateStartButton();
+
+}
+
+
+function updateSelectedInfo() {
+
+  const info =
+    document.getElementById("selectedInfo");
+
+  if (selectedCategories.length === 0) {
+
+    info.textContent =
+      "No categories selected.";
+
+    return;
+
+  }
+
+  info.textContent =
+    selectedCategories.length +
+    " categor" +
+    (selectedCategories.length === 1 ? "y" : "ies") +
+    " selected: " +
+    selectedCategories.join(", ");
+
+}
+
+
+function selectTimer(button) {
+
+  document
+    .querySelectorAll(".timer-option")
+    .forEach(item => {
+      item.classList.remove("selected");
+    });
+
+  button.classList.add("selected");
+
+  selectedTimerMinutes =
+    parseInt(button.dataset.time);
+
+  updateStartButton();
+
+}
+
+
+function updateStartButton() {
+
+  const button =
+    document.getElementById("startButton");
+
+  button.disabled =
+    selectedCategories.length === 0 ||
+    selectedTimerMinutes === 0;
+
+}
+
+
+/* =========================================================
+   CREATE WORD POOL
+========================================================= */
+
+function createWordPool() {
+
+  wordPool = [];
+
+  selectedCategories.forEach(category => {
+
+    const words = wordDatabase[category] || [];
+
+    words.forEach(word => {
+
+      wordPool.push({
+        word: word,
+        pattern: category
+      });
+
+    });
+
+  });
+
+  shuffleArray(wordPool);
+
+}
+
+
+/* =========================================================
+   SHUFFLE
+========================================================= */
+
+function shuffleArray(array) {
+
+  for (
+    let i = array.length - 1;
+    i > 0;
+    i--
+  ) {
+
+    const j =
+      Math.floor(Math.random() * (i + 1));
+
+    [
+      array[i],
+      array[j]
+    ] =
+    [
+      array[j],
+      array[i]
+    ];
+
+  }
 
 }
 
@@ -1327,234 +1618,152 @@ if (SpeechRecognition) {
 
 function startAssessment() {
 
-  selectedPatterns = [];
-
-  document
-    .querySelectorAll('.category-option input[type="checkbox"]:checked')
-    .forEach(function(input) {
-
-      selectedPatterns.push(input.value);
-
-    });
-
-
-  if (selectedPatterns.length === 0) {
-
-    showSetupMessage(
-      "Please select at least one phonics category.",
-      true
-    );
-
+  if (
+    selectedCategories.length === 0 ||
+    selectedTimerMinutes === 0
+  ) {
     return;
   }
 
-
-  const timerChoice =
-    document.querySelector('input[name="timer"]:checked');
-
-  if (!timerChoice) {
-
-    showSetupMessage(
-      "Please choose an assessment time.",
-      true
-    );
-
-    return;
-  }
-
-
-  timerSeconds =
-    parseInt(timerChoice.value) * 60;
-
-  remainingSeconds = timerSeconds;
-
-
-  buildWordPool();
-
-
-  if (wordPool.length === 0) {
-
-    showSetupMessage(
-      "No words were found for the selected categories.",
-      true
-    );
-
-    return;
-  }
-
+  createWordPool();
 
   currentWordIndex = 0;
-  totalAttempts = 0;
-  correctWords = 0;
-  retryCount = 0;
-  skippedCount = 0;
+
+  currentWordData = null;
+
   currentAttempts = 0;
 
-  wordResults = [];
+  correctWords = 0;
 
-  assessmentStarted = true;
-  paused = false;
+  totalAttempts = 0;
 
-  assessmentStartTime = Date.now();
+  skippedWords = 0;
 
+  assessmentResults = [];
 
-  document
-    .getElementById("setupScreen")
-    .classList.add("hidden");
+  totalAssessmentSeconds =
+    selectedTimerMinutes * 60;
 
-  document
-    .getElementById("resultsScreen")
-    .classList.add("hidden");
+  timeRemaining =
+    totalAssessmentSeconds;
 
-  document
-    .getElementById("assessmentScreen")
-    .classList.remove("hidden");
+  assessmentStartTime =
+    Date.now();
 
+  isPaused = false;
 
-  document.getElementById("browserWarning")
-    .classList.toggle("hidden", !!SpeechRecognition);
+  isAssessmentRunning = true;
 
+  document.getElementById("setupScreen").style.display =
+    "none";
 
-  showCurrentWord();
+  document.getElementById("resultsScreen").style.display =
+    "none";
+
+  document.getElementById("assessmentScreen").style.display =
+    "block";
+
+  updateCorrectDisplay();
 
   updateTimerDisplay();
 
+  loadNextWord();
+
   startTimer();
-}
 
-
-/* =========================================================
-   BUILD WORD POOL
-========================================================= */
-
-function buildWordPool() {
-
-  wordPool = [];
-
-  selectedPatterns.forEach(function(pattern) {
-
-    if (!WORD_DATABASE[pattern]) {
-      return;
-    }
-
-    WORD_DATABASE[pattern].forEach(function(word) {
-
-      wordPool.push({
-        word: word,
-        pattern: pattern
-      });
-
-    });
-
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
   });
 
-
-  shuffleArray(wordPool);
 }
 
 
 /* =========================================================
-   SHUFFLE
+   LOAD NEXT WORD
 ========================================================= */
 
-function shuffleArray(array) {
+function loadNextWord() {
 
-  for (let i = array.length - 1; i > 0; i--) {
-
-    const j =
-      Math.floor(Math.random() * (i + 1));
-
-    [array[i], array[j]] =
-      [array[j], array[i]];
+  if (!isAssessmentRunning) {
+    return;
   }
 
-}
-
-
-/* =========================================================
-   SHOW CURRENT WORD
-========================================================= */
-
-function showCurrentWord() {
+  /*
+   If we reach the end of the word pool,
+   shuffle it again so the assessment can
+   continue for the full selected time.
+  */
 
   if (currentWordIndex >= wordPool.length) {
 
-    buildWordPool();
-
     currentWordIndex = 0;
+
+    shuffleArray(wordPool);
+
   }
 
-
-  const item = wordPool[currentWordIndex];
-
-  currentWord = item.word;
-  currentPattern = item.pattern;
+  currentWordData =
+    wordPool[currentWordIndex];
 
   currentAttempts = 0;
 
+  displayCurrentWord();
 
-  document.getElementById("wordDisplay").textContent =
-    currentWord;
+}
 
-  document.getElementById("patternDisplay").textContent =
-    "Pattern: " + currentPattern;
+
+/* =========================================================
+   DISPLAY CURRENT WORD
+========================================================= */
+
+function displayCurrentWord() {
+
+  if (!currentWordData) {
+    return;
+  }
 
   document.getElementById("wordNumber").textContent =
-    correctWords + 1;
+    "Word " + (assessmentResults.length + 1);
 
-  document.getElementById("attemptCount").textContent =
-    totalAttempts;
+  document.getElementById("wordCountDisplay").textContent =
+    assessmentResults.length + 1;
 
-  document.getElementById("retryCount").textContent =
-    retryCount;
+  document.getElementById("patternLabel").textContent =
+    currentWordData.pattern;
 
-  document.getElementById("elapsedWords").textContent =
-    correctWords;
+  document.getElementById("currentWord").textContent =
+    currentWordData.word;
 
+  updateAttemptInfo();
 
-  document.getElementById("listeningStatus").textContent =
-    "Tap the microphone and read the word.";
-
-  document.getElementById("listeningStatus").className =
-    "listening-status";
 }
 
 
 /* =========================================================
-   START LISTENING
+   ATTEMPT INFORMATION
 ========================================================= */
 
-function startListening() {
+function updateAttemptInfo() {
 
-  if (!assessmentStarted || paused) {
-    return;
-  }
+  const info =
+    document.getElementById("attemptInfo");
 
+  if (currentAttempts === 0) {
 
-  if (!SpeechRecognition) {
+    info.textContent =
+      "First attempt";
 
-    document.getElementById("listeningStatus").innerHTML =
-      "Speech recognition is not supported in this browser.";
+  } else if (currentAttempts === 1) {
 
-    document.getElementById("listeningStatus").className =
-      "listening-status incorrect";
+    info.textContent =
+      "1 incorrect attempt — try again";
 
-    return;
-  }
+  } else {
 
-
-  if (isListening) {
-    return;
-  }
-
-
-  try {
-
-    recognition.start();
-
-  } catch (error) {
-
-    console.log(error);
+    info.textContent =
+      currentAttempts +
+      " incorrect attempts — try again";
 
   }
 
@@ -1562,147 +1771,63 @@ function startListening() {
 
 
 /* =========================================================
-   EVALUATE SPEECH
+   MARK INCORRECT
 ========================================================= */
 
-function evaluateSpeech(transcript) {
+function markIncorrect() {
 
-  document
-    .getElementById("microphoneButton")
-    .classList.remove("listening");
-
+  if (
+    !isAssessmentRunning ||
+    isPaused
+  ) {
+    return;
+  }
 
   currentAttempts++;
+
   totalAttempts++;
 
+  updateAttemptInfo();
 
-  const normalizedTranscript =
-    normalizeSpeech(transcript);
-
-  const normalizedTarget =
-    normalizeSpeech(currentWord);
-
-
-  /*
-    Exact match is the strongest result.
-  */
-
-  if (normalizedTranscript === normalizedTarget) {
-
-    markCorrect();
-
-    return;
-  }
-
-
-  /*
-    Sometimes speech recognition adds words.
-    Example:
-    "cat" → "cat."
-    "the cat" → "the cat"
-  */
-
-  const words =
-    normalizedTranscript.split(" ");
-
-  if (words.includes(normalizedTarget)) {
-
-    markCorrect();
-
-    return;
-  }
-
-
-  /*
-    Some browsers may return small variations.
-    We do NOT automatically accept a very different word.
-  */
-
-  markIncorrect(transcript);
 }
 
 
 /* =========================================================
-   NORMALIZE SPEECH
-========================================================= */
-
-function normalizeSpeech(text) {
-
-  return text
-    .toLowerCase()
-    .replace(/[.,!?;:'"]/g, "")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
-
-/* =========================================================
-   CORRECT
+   MARK CORRECT
 ========================================================= */
 
 function markCorrect() {
 
+  if (
+    !isAssessmentRunning ||
+    isPaused
+  ) {
+    return;
+  }
+
+  currentAttempts++;
+
+  totalAttempts++;
+
   correctWords++;
 
-  wordResults.push({
-    word: currentWord,
-    pattern: currentPattern,
+  assessmentResults.push({
+
+    word: currentWordData.word,
+
+    pattern: currentWordData.pattern,
+
     attempts: currentAttempts,
+
     result: "Correct"
+
   });
 
+  currentWordIndex++;
 
-  document.getElementById("correctCount").textContent =
-    correctWords;
+  updateCorrectDisplay();
 
-  document.getElementById("elapsedWords").textContent =
-    correctWords;
-
-  document.getElementById("listeningStatus").textContent =
-    "Correct!";
-
-  document.getElementById("listeningStatus").className =
-    "listening-status correct";
-
-
-  /*
-    Give the student a very short moment
-    to see the success message.
-  */
-
-  setTimeout(function() {
-
-    if (!assessmentStarted || paused) {
-      return;
-    }
-
-    currentWordIndex++;
-
-    showCurrentWord();
-
-  }, 500);
-
-}
-
-
-/* =========================================================
-   INCORRECT
-========================================================= */
-
-function markIncorrect(transcript) {
-
-  retryCount++;
-
-
-  document.getElementById("retryCount").textContent =
-    retryCount;
-
-
-  document.getElementById("listeningStatus").innerHTML =
-    "Try again.";
-
-  document.getElementById("listeningStatus").className =
-    "listening-status incorrect";
+  loadNextWord();
 
 }
 
@@ -1713,25 +1838,43 @@ function markIncorrect(transcript) {
 
 function skipWord() {
 
-  if (!assessmentStarted || paused) {
+  if (
+    !isAssessmentRunning ||
+    isPaused
+  ) {
     return;
   }
 
+  assessmentResults.push({
 
-  skippedCount++;
+    word: currentWordData.word,
 
+    pattern: currentWordData.pattern,
 
-  wordResults.push({
-    word: currentWord,
-    pattern: currentPattern,
     attempts: currentAttempts,
+
     result: "Skipped"
+
   });
 
+  skippedWords++;
 
   currentWordIndex++;
 
-  showCurrentWord();
+  loadNextWord();
+
+}
+
+
+/* =========================================================
+   CORRECT DISPLAY
+========================================================= */
+
+function updateCorrectDisplay() {
+
+  document.getElementById("correctDisplay").textContent =
+    correctWords;
+
 }
 
 
@@ -1743,29 +1886,26 @@ function startTimer() {
 
   clearInterval(timerInterval);
 
-
   timerInterval = setInterval(function() {
 
-    if (!assessmentStarted || paused) {
+    if (
+      !isAssessmentRunning ||
+      isPaused
+    ) {
       return;
     }
 
-
-    remainingSeconds--;
-
+    timeRemaining--;
 
     updateTimerDisplay();
 
+    updateProgressBar();
 
-    if (remainingSeconds <= 0) {
-
-      remainingSeconds = 0;
-
-      updateTimerDisplay();
+    if (timeRemaining <= 0) {
 
       clearInterval(timerInterval);
 
-      finishAssessment();
+      finishAssessment("time");
 
     }
 
@@ -1774,47 +1914,53 @@ function startTimer() {
 }
 
 
-/* =========================================================
-   UPDATE TIMER DISPLAY
-========================================================= */
-
 function updateTimerDisplay() {
 
+  const display =
+    document.getElementById("timerDisplay");
+
   const minutes =
-    Math.floor(remainingSeconds / 60);
+    Math.floor(timeRemaining / 60);
 
   const seconds =
-    remainingSeconds % 60;
+    timeRemaining % 60;
 
-
-  const display =
-    minutes +
+  display.textContent =
+    String(minutes).padStart(2, "0") +
     ":" +
     String(seconds).padStart(2, "0");
 
-
-  const timer =
-    document.getElementById("timerDisplay");
-
-
-  timer.textContent = display;
-
-
-  timer.classList.remove(
-    "warning",
-    "danger"
+  display.classList.remove(
+    "safe",
+    "warning"
   );
 
+  if (timeRemaining <= 30) {
 
-  if (remainingSeconds <= 30) {
+    display.classList.add("warning");
 
-    timer.classList.add("danger");
+  } else {
 
-  } else if (remainingSeconds <= 60) {
-
-    timer.classList.add("warning");
+    display.classList.add("safe");
 
   }
+
+}
+
+
+function updateProgressBar() {
+
+  const bar =
+    document.getElementById("progressBar");
+
+  const percentage =
+    (
+      timeRemaining /
+      totalAssessmentSeconds
+    ) * 100;
+
+  bar.style.width =
+    Math.max(0, percentage) + "%";
 
 }
 
@@ -1825,39 +1971,43 @@ function updateTimerDisplay() {
 
 function pauseAssessment() {
 
-  if (!assessmentStarted) {
+  if (
+    !isAssessmentRunning ||
+    isPaused
+  ) {
     return;
   }
 
+  isPaused = true;
 
-  paused = !paused;
+  document.getElementById("pausedOverlay").style.display =
+    "flex";
+
+  document.getElementById("pauseButton").textContent =
+    "▶ Resume";
+
+  document.getElementById("pauseButton").onclick =
+    resumeAssessment;
+
+}
 
 
-  const button =
-    event.target;
+function resumeAssessment() {
 
-
-  if (paused) {
-
-    button.textContent = "Resume";
-
-    document.getElementById("listeningStatus").textContent =
-      "Assessment paused.";
-
-    if (isListening && recognition) {
-
-      recognition.stop();
-
-    }
-
-  } else {
-
-    button.textContent = "Pause";
-
-    document.getElementById("listeningStatus").textContent =
-      "Tap the microphone and read the word.";
-
+  if (!isAssessmentRunning) {
+    return;
   }
+
+  isPaused = false;
+
+  document.getElementById("pausedOverlay").style.display =
+    "none";
+
+  document.getElementById("pauseButton").textContent =
+    "⏸ Pause";
+
+  document.getElementById("pauseButton").onclick =
+    pauseAssessment;
 
 }
 
@@ -1868,21 +2018,21 @@ function pauseAssessment() {
 
 function endAssessment() {
 
-  if (!assessmentStarted) {
+  if (!isAssessmentRunning) {
     return;
   }
 
-
   const confirmed =
-    confirm("Are you sure you want to end the assessment?");
-
+    confirm(
+      "Are you sure you want to end the assessment?"
+    );
 
   if (!confirmed) {
     return;
   }
 
+  finishAssessment("manual");
 
-  finishAssessment();
 }
 
 
@@ -1890,28 +2040,31 @@ function endAssessment() {
    FINISH ASSESSMENT
 ========================================================= */
 
-function finishAssessment() {
+function finishAssessment(reason) {
 
-  assessmentStarted = false;
-  paused = false;
+  if (!isAssessmentRunning) {
+    return;
+  }
+
+  isAssessmentRunning = false;
+
+  isPaused = false;
 
   clearInterval(timerInterval);
 
+  document.getElementById("pausedOverlay").style.display =
+    "none";
 
-  if (recognition && isListening) {
-
-    try {
-      recognition.stop();
-    } catch (e) {}
-
-  }
-
+  /*
+   Calculate the actual time used.
+  */
 
   const timeUsed =
-    timerSeconds - remainingSeconds;
-
+    totalAssessmentSeconds -
+    timeRemaining;
 
   showResults(timeUsed);
+
 }
 
 
@@ -1921,150 +2074,143 @@ function finishAssessment() {
 
 function showResults(timeUsed) {
 
-  document
-    .getElementById("assessmentScreen")
-    .classList.add("hidden");
+  document.getElementById("assessmentScreen").style.display =
+    "none";
 
-  document
-    .getElementById("resultsScreen")
-    .classList.remove("hidden");
-
+  document.getElementById("resultsScreen").style.display =
+    "block";
 
   /*
-    Accuracy is based on words that were completed
-    rather than retries.
+   If the teacher ends the assessment immediately,
+   avoid division by zero.
   */
 
   const completedWords =
-    correctWords + skippedCount;
+    assessmentResults.length;
 
+  const accuracy =
+    completedWords > 0
+      ? (correctWords / completedWords) * 100
+      : 0;
 
-  let accuracy = 0;
+  const minutesUsed =
+    timeUsed > 0
+      ? timeUsed / 60
+      : 1 / 60;
 
-  if (completedWords > 0) {
-
-    accuracy =
-      Math.round(
-        (correctWords / completedWords) * 100
-      );
-
-  }
-
-
-  document.getElementById("bigScore").textContent =
-    accuracy + "%";
-
+  const wordsPerMinute =
+    correctWords / minutesUsed;
 
   document.getElementById("resultCorrect").textContent =
     correctWords;
 
+  document.getElementById("resultTotal").textContent =
+    completedWords;
 
-  document.getElementById("resultAttempts").textContent =
-    totalAttempts;
-
-
-  document.getElementById("resultRetries").textContent =
-    retryCount;
-
-
-  document.getElementById("resultSkipped").textContent =
-    skippedCount;
-
-
-  /*
-    Words correct per minute.
-  */
-
-  let wpm = 0;
-
-  if (timeUsed > 0) {
-
-    wpm =
-      Math.round(
-        correctWords / (timeUsed / 60)
-      );
-
-  }
-
+  document.getElementById("resultAccuracy").textContent =
+    Math.round(accuracy) + "%";
 
   document.getElementById("resultWPM").textContent =
-    wpm;
-
+    wordsPerMinute.toFixed(1);
 
   document.getElementById("resultTime").textContent =
     formatTime(timeUsed);
 
+  document.getElementById("resultAttempts").textContent =
+    totalAttempts;
+
+  document.getElementById("resultSkipped").textContent =
+    skippedWords;
+
+  document.getElementById("resultCategories").textContent =
+    selectedCategories.length;
 
   buildResultsTable();
-}
 
-
-/* =========================================================
-   RESULTS TABLE
-========================================================= */
-
-function buildResultsTable() {
-
-  const table =
-    document.getElementById("resultsTableBody");
-
-
-  table.innerHTML = "";
-
-
-  wordResults.forEach(function(result) {
-
-    const row =
-      document.createElement("tr");
-
-
-    let statusClass = "";
-
-
-    if (result.result === "Correct") {
-      statusClass = "status-correct";
-    }
-
-    if (result.result === "Skipped") {
-      statusClass = "status-skipped";
-    }
-
-
-    if (result.result === "Retry") {
-      statusClass = "status-retry";
-    }
-
-
-    row.innerHTML = `
-      <td>${escapeHtml(result.word)}</td>
-      <td>${escapeHtml(result.pattern)}</td>
-      <td>${result.attempts}</td>
-      <td class="${statusClass}">
-        ${escapeHtml(result.result)}
-      </td>
-    `;
-
-
-    table.appendChild(row);
-
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
   });
 
 }
 
 
 /* =========================================================
-   RETURN TO SETUP
+   BUILD RESULTS TABLE
 ========================================================= */
 
-function returnToSetup() {
+function buildResultsTable() {
 
-  document
-    .getElementById("resultsScreen")
-    .classList.add("hidden");
+  const tableBody =
+    document.getElementById("resultsTableBody");
 
-  document
-    .getElementById("setupScreen")
-    .classList.remove("hidden");
+  tableBody.innerHTML = "";
+
+  assessmentResults.forEach(
+    function(result, index) {
+
+      const row =
+        document.createElement("tr");
+
+      const numberCell =
+        document.createElement("td");
+
+      numberCell.textContent =
+        index + 1;
+
+      const wordCell =
+        document.createElement("td");
+
+      wordCell.textContent =
+        result.word;
+
+      wordCell.style.fontWeight =
+        "bold";
+
+      const patternCell =
+        document.createElement("td");
+
+      patternCell.textContent =
+        result.pattern;
+
+      const attemptsCell =
+        document.createElement("td");
+
+      attemptsCell.textContent =
+        result.attempts;
+
+      const resultCell =
+        document.createElement("td");
+
+      resultCell.textContent =
+        result.result;
+
+      if (result.result === "Correct") {
+
+        resultCell.className =
+          "result-correct";
+
+      } else {
+
+        resultCell.className =
+          "result-skipped";
+
+      }
+
+      row.appendChild(numberCell);
+
+      row.appendChild(wordCell);
+
+      row.appendChild(patternCell);
+
+      row.appendChild(attemptsCell);
+
+      row.appendChild(resultCell);
+
+      tableBody.appendChild(row);
+
+    }
+  );
 
 }
 
@@ -2073,84 +2219,75 @@ function returnToSetup() {
    FORMAT TIME
 ========================================================= */
 
-function formatTime(seconds) {
+function formatTime(totalSeconds) {
 
   const minutes =
-    Math.floor(seconds / 60);
+    Math.floor(totalSeconds / 60);
 
-  const secs =
-    seconds % 60;
-
+  const seconds =
+    totalSeconds % 60;
 
   return (
     minutes +
     ":" +
-    String(secs).padStart(2, "0")
+    String(seconds).padStart(2, "0")
   );
+
 }
 
 
 /* =========================================================
-   SETUP MESSAGE
+   RESTART
 ========================================================= */
 
-function showSetupMessage(message, isError) {
+function restartAssessment() {
 
-  const box =
-    document.getElementById("setupMessage");
+  clearInterval(timerInterval);
 
+  isAssessmentRunning = false;
 
-  box.className =
-    isError ? "error-box" : "info-box";
+  isPaused = false;
 
+  currentWordIndex = 0;
 
-  box.textContent =
-    message;
+  currentWordData = null;
+
+  currentAttempts = 0;
+
+  correctWords = 0;
+
+  totalAttempts = 0;
+
+  skippedWords = 0;
+
+  assessmentResults = [];
+
+  timeRemaining = 0;
+
+  document.getElementById("resultsScreen").style.display =
+    "none";
+
+  document.getElementById("assessmentScreen").style.display =
+    "none";
+
+  document.getElementById("setupScreen").style.display =
+    "block";
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
 }
 
 
 /* =========================================================
-   ESCAPE HTML
+   INITIAL SETUP
 ========================================================= */
 
-function escapeHtml(text) {
+updateSelectedInfo();
 
-  return text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
-
-
-/* =========================================================
-   KEYBOARD SUPPORT
-========================================================= */
-
-document.addEventListener("keydown", function(event) {
-
-  if (!assessmentStarted || paused) {
-    return;
-  }
-
-
-  /*
-    Spacebar = microphone
-  */
-
-  if (
-    event.code === "Space" &&
-    document.activeElement.tagName !== "BUTTON"
-  ) {
-
-    event.preventDefault();
-
-    startListening();
-  }
-
-});
-
+updateStartButton();
 
 </script>
 
