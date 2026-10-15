@@ -330,7 +330,7 @@ h1 {
 
 .assessment-buttons {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
 }
 
@@ -358,14 +358,6 @@ h1 {
 
 .incorrect-btn:hover {
   background: #b71c1c;
-}
-
-.skip-btn {
-  background: #607d8b;
-}
-
-.skip-btn:hover {
-  background: #455a64;
 }
 
 /* =========================
@@ -402,6 +394,38 @@ h1 {
   display: none;
 }
 
+.results-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.results-header h1 {
+  margin: 0;
+}
+
+.results-date {
+  color: #607d8b;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-align: right;
+}
+
+@media (max-width: 520px) {
+  .results-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .results-date {
+    text-align: left;
+  }
+}
+
 .result-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -427,6 +451,63 @@ h1 {
   color: #607d8b;
   font-size: 13px;
   margin-top: 5px;
+}
+
+
+/* =========================
+   PHONICS SKILLS ANALYSIS
+========================= */
+.phonics-analysis {
+  display: grid;
+  gap: 14px;
+  margin: 12px 0 28px;
+}
+.skill-analysis-card {
+  border: 1px solid #d9e2e8;
+  border-radius: 12px;
+  padding: 15px;
+  background: #fbfdff;
+}
+.skill-analysis-card h3 {
+  margin: 0 0 10px;
+  color: #37474f;
+  font-size: 17px;
+}
+.skill-analysis-card p {
+  margin: 5px 0;
+  color: #546e7a;
+  font-size: 14px;
+}
+.skill-pattern-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+.skill-pattern-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: #ffebee;
+  color: #b71c1c;
+  border: 1px solid #ef9a9a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.skill-pattern-chip.good {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border-color: #a5d6a7;
+}
+.skill-priority {
+  color: #b71c1c !important;
+  font-weight: 800;
+}
+.skill-no-errors {
+  color: #2e7d32 !important;
+  font-weight: 700;
 }
 
 /* =========================
@@ -511,6 +592,51 @@ h1 {
 /* =========================
    RESPONSIVE
 ========================= */
+
+
+.word-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 8px;
+  margin: 12px 0 26px;
+}
+.word-summary-item {
+  min-width: 0;
+  min-height: 54px;
+  padding: 8px 4px;
+  border-radius: 8px;
+  border: 2px solid;
+  font-size: 15px;
+  font-weight: 800;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.word-summary-item.correct {
+  color: #2e7d32;
+  background: #e8f5e9;
+  border-color: #81c784;
+}
+.word-summary-item.incorrect {
+  color: #c62828;
+  background: #ffebee;
+  border-color: #ef9a9a;
+}
+.word-summary-item small {
+  font-size: 9px;
+  font-weight: 800;
+  white-space: normal;
+}
+@media (max-width: 1000px) {
+  .word-summary-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}
+@media (max-width: 500px) {
+  .word-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 
 @media (max-width: 750px) {
 
@@ -1012,6 +1138,12 @@ h1 {
     </div>
 
 
+    <div class="card">
+      <h2>Student / User Name</h2>
+      <input id="userName" type="text" placeholder="Enter the student's name"
+        style="width:100%;padding:12px;border:1px solid #cfd8dc;border-radius:8px;font-size:16px;">
+    </div>
+
     <!-- TIMER -->
 
     <div class="card">
@@ -1122,10 +1254,6 @@ h1 {
           ✕ Incorrect
         </button>
 
-        <button class="assess-btn skip-btn"
-                onclick="skipWord()">
-          → Skip
-        </button>
 
       </div>
 
@@ -1151,7 +1279,13 @@ h1 {
 
     <div class="card">
 
-      <h1>Assessment Results</h1>
+      <div class="results-header">
+        <h1>Assessment Results</h1>
+        <div id="resultDate" class="results-date" aria-label="Assessment date"></div>
+      </div>
+
+      <h2 id="resultUserName" style="text-align:center;color:#37474f;margin:12px 0 6px;">Student:</h2>
+      <p id="resultPercentMessage" style="text-align:center;font-size:18px;font-weight:800;margin:0 0 24px;"></p>
 
       <div class="result-grid">
 
@@ -1221,16 +1355,6 @@ h1 {
           </div>
         </div>
 
-        <div class="result-box">
-          <div id="resultSkipped"
-               class="result-number">
-            0
-          </div>
-
-          <div class="result-label">
-            Skipped
-          </div>
-        </div>
 
         <div class="result-box">
           <div id="resultCategories"
@@ -1244,6 +1368,14 @@ h1 {
         </div>
 
       </div>
+
+      <h2>Phonics Skills Analysis</h2>
+      <p style="color:#607d8b;margin-top:-8px;">See which phonics patterns the student found difficult. Results are based on the words assessed in this session.</p>
+      <div id="phonicsSkillAnalysis" class="phonics-analysis"></div>
+
+      <h2>Word Summary</h2>
+      <p style="color:#607d8b;margin-top:-8px;">Words are shown in the order they appeared. Correct words are green; incorrect words are red. Each row shows up to 10 words.</p>
+      <div id="wordSummary" class="word-summary-grid"></div>
 
       <h2>Detailed Results</h2>
 
@@ -1622,7 +1754,6 @@ let totalAttempts = 0;
 
 let correctCount = 0;
 
-let skippedCount = 0;
 
 let assessmentStartTime = null;
 
@@ -1631,6 +1762,8 @@ let timerInterval = null;
 let timeRemaining = 0;
 
 let results = [];
+let userName = "";
+let assessmentFinished = false;
 
 
 /* =========================================================
@@ -1889,6 +2022,9 @@ function selectTimer(minutes) {
 ========================================================= */
 
 function startAssessment() {
+  userName = document.getElementById("userName").value.trim() || "Unnamed Student";
+  assessmentFinished = false;
+
 
   const message =
     document.getElementById(
@@ -1941,7 +2077,6 @@ function startAssessment() {
 
   correctCount = 0;
 
-  skippedCount = 0;
 
   results = [];
 
@@ -2097,6 +2232,7 @@ function markCorrect() {
 
   setTimeout(() => {
 
+    if (assessmentFinished) return;
     currentIndex++;
 
     currentAttempts = 0;
@@ -2113,71 +2249,23 @@ function markCorrect() {
 ========================================================= */
 
 function markIncorrect() {
+  if (assessmentFinished || !assessmentWords[currentIndex]) return;
 
   currentAttempts++;
-
   totalAttempts++;
-
-
-  document.getElementById(
-    "attemptInfo"
-  ).textContent =
-    "Attempts: " +
-    currentAttempts;
-
-
-  document.getElementById(
-    "retryMessage"
-  ).textContent =
-    "Try again.";
-
-  document.getElementById(
-    "retryMessage"
-  ).className =
-    "retry-message incorrect";
-
-}
-
-
-/* =========================================================
-   SKIP
-========================================================= */
-
-function skipWord() {
-
-  currentAttempts++;
-
-  totalAttempts++;
-
-  skippedCount++;
-
 
   results.push({
-
-    number:
-      results.length + 1,
-
-    word:
-      assessmentWords[currentIndex].word,
-
-    category:
-      assessmentWords[currentIndex].category,
-
-    attempts:
-      currentAttempts,
-
-    result:
-      "Skipped"
-
+    number: results.length + 1,
+    word: assessmentWords[currentIndex].word,
+    category: assessmentWords[currentIndex].category,
+    attempts: currentAttempts,
+    result: "Incorrect"
   });
 
-
+  // Marking a word incorrect immediately moves to the next word.
   currentIndex++;
-
   currentAttempts = 0;
-
   showCurrentWord();
-
 }
 
 
@@ -2266,7 +2354,8 @@ function updateTimerDisplay() {
 ========================================================= */
 
 function finishAssessment() {
-
+  if (assessmentFinished) return;
+  assessmentFinished = true;
   clearInterval(timerInterval);
 
 
@@ -2287,12 +2376,7 @@ function finishAssessment() {
 
   const accuracy =
     completed > 0
-      ? Math.round(
-          (
-            correctCount /
-            completed
-          ) * 100
-        )
+      ? Math.round((correctCount / completed) * 100)
       : 0;
 
 
@@ -2356,17 +2440,24 @@ function finishAssessment() {
 
 
   document.getElementById(
-    "resultSkipped"
-  ).textContent =
-    skippedCount;
-
-
-  document.getElementById(
     "resultCategories"
   ).textContent =
     selectedCategories.size;
 
 
+  document.getElementById("resultUserName").textContent = "Student: " + userName;
+  document.getElementById("resultDate").textContent = new Date().toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric"
+  }).replace(/,/g, "");
+  document.getElementById("resultPercentMessage").textContent =
+    userName + " got " + accuracy + "% correct (" + correctCount + " out of " + completed + " assessed words).";
+  document.getElementById("resultPercentMessage").style.color =
+    accuracy >= 80 ? "#2e7d32" : accuracy >= 50 ? "#ef6c00" : "#c62828";
+
+  displayPhonicsSkillAnalysis();
+  displayWordSummary();
   displayResultsTable();
 
 }
@@ -2375,6 +2466,137 @@ function finishAssessment() {
 /* =========================================================
    RESULTS TABLE
 ========================================================= */
+
+
+
+/* =========================================================
+   PHONICS SKILLS ANALYSIS
+========================================================= */
+
+function getPhonicsSkill(category) {
+  if (groups.shortA.includes(category) || groups.shortE.includes(category) ||
+      groups.shortI.includes(category) || groups.shortO.includes(category) ||
+      groups.shortU.includes(category)) {
+    return "Short-vowel word endings";
+  }
+  if (groups.blends.includes(category)) return "Consonant blends";
+  if (groups.digraphs.includes(category)) return "Digraphs";
+  return "Other phonics patterns";
+}
+
+function displayPhonicsSkillAnalysis() {
+  const container = document.getElementById("phonicsSkillAnalysis");
+  container.innerHTML = "";
+
+  if (!results.length) {
+    const empty = document.createElement("div");
+    empty.className = "skill-analysis-card";
+    empty.textContent = "No words were assessed, so there is not enough information to analyse phonics skills.";
+    container.appendChild(empty);
+    return;
+  }
+
+  const skills = {};
+  const patterns = {};
+
+  results.forEach(result => {
+    const skill = getPhonicsSkill(result.category);
+    if (!skills[skill]) skills[skill] = { total: 0, correct: 0, incorrect: 0, missedWords: [] };
+    if (!patterns[result.category]) patterns[result.category] = { total: 0, correct: 0, incorrect: 0, missedWords: [] };
+
+    const isCorrect = result.result === "Correct";
+    [skills[skill], patterns[result.category]].forEach(stat => {
+      stat.total++;
+      if (isCorrect) stat.correct++;
+      else {
+        stat.incorrect++;
+        stat.missedWords.push(result.word);
+      }
+    });
+  });
+
+  const skillEntries = Object.entries(skills).sort((a, b) => {
+    const rateA = a[1].incorrect / a[1].total;
+    const rateB = b[1].incorrect / b[1].total;
+    return rateB - rateA || b[1].incorrect - a[1].incorrect;
+  });
+
+  skillEntries.forEach(([skill, stat]) => {
+    const card = document.createElement("section");
+    card.className = "skill-analysis-card";
+    const heading = document.createElement("h3");
+    heading.textContent = skill;
+    card.appendChild(heading);
+
+    const accuracy = Math.round((stat.correct / stat.total) * 100);
+    const summary = document.createElement("p");
+    summary.textContent = `Accuracy: ${accuracy}% (${stat.correct} correct out of ${stat.total} words); ${stat.incorrect} incorrect.`;
+    card.appendChild(summary);
+
+    if (stat.incorrect > 0) {
+      const focus = document.createElement("p");
+      focus.className = "skill-priority";
+      focus.textContent = "Needs practice: " + [...new Set(stat.missedWords)].join(", ");
+      card.appendChild(focus);
+    } else {
+      const strength = document.createElement("p");
+      strength.className = "skill-no-errors";
+      strength.textContent = "No incorrect words in this skill during this assessment.";
+      card.appendChild(strength);
+    }
+    container.appendChild(card);
+  });
+
+  const patternCard = document.createElement("section");
+  patternCard.className = "skill-analysis-card";
+  const patternHeading = document.createElement("h3");
+  patternHeading.textContent = "Individual Pattern Breakdown";
+  patternCard.appendChild(patternHeading);
+  const explanation = document.createElement("p");
+  explanation.textContent = "Patterns with more errors are listed first. The percentage shows how many words in each pattern were incorrect.";
+  patternCard.appendChild(explanation);
+
+  const chipList = document.createElement("div");
+  chipList.className = "skill-pattern-list";
+  Object.entries(patterns).sort((a, b) => {
+    const rateA = a[1].incorrect / a[1].total;
+    const rateB = b[1].incorrect / b[1].total;
+    return rateB - rateA || b[1].incorrect - a[1].incorrect;
+  }).forEach(([category, stat]) => {
+    const chip = document.createElement("div");
+    chip.className = "skill-pattern-chip" + (stat.incorrect === 0 ? " good" : "");
+    const rate = Math.round((stat.incorrect / stat.total) * 100);
+    const label = categoryNames[category] || category;
+    chip.textContent = `${label}: ${stat.incorrect}/${stat.total} wrong (${rate}%)`;
+    chip.title = stat.incorrect ? "Incorrect words: " + [...new Set(stat.missedWords)].join(", ") : "All assessed words in this pattern were correct.";
+    chipList.appendChild(chip);
+  });
+  patternCard.appendChild(chipList);
+  container.appendChild(patternCard);
+}
+
+
+function displayWordSummary() {
+  const container = document.getElementById("wordSummary");
+  container.innerHTML = "";
+
+  results.forEach(result => {
+    const item = document.createElement("div");
+    const isCorrect = result.result === "Correct";
+    item.className = "word-summary-item " + (isCorrect ? "correct" : "incorrect");
+
+    const word = document.createElement("span");
+    word.textContent = result.word;
+
+    const status = document.createElement("small");
+    status.textContent = isCorrect ? "✓ CORRECT" : "✕ INCORRECT";
+
+    item.appendChild(word);
+    item.appendChild(status);
+    container.appendChild(item);
+  });
+}
+
 
 function displayResultsTable() {
 
